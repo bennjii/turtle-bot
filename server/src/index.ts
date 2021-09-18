@@ -1,6 +1,6 @@
 import { Server } from 'ws';
 import { Server as SocketIO } from "socket.io";
-import { connect } from 'ngrok';
+// import { connect } from 'ngrok';
 import { FleetManager } from './fleet_manager'
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
@@ -9,12 +9,12 @@ const fleet = new Server({ port: 5757 });
 const fleetManager = new FleetManager(fleet);
 
 (async () => {
-	const fleetURL = await connect(5757);
-	console.log(`[URL] ${fleetURL.replace("https", "ws")}`);
+	// const fleetURL = await connect(5757);
+	console.log(`[URL] 128.199.234.165:5757`);
 
-    const webURL = await connect(5758);
-    fs.writeFileSync('../client/turtle-bot/public/ip.json', `{ "url": "${webURL}" }`);
-	console.log(`[URL] ${webURL.replace("https", "ws")}`);
+    // const webURL = await connect(5758);
+    fs.writeFileSync('../client/turtle-bot/public/ip.json', `{ "url": "http://128.199.234.165:5758" }`);
+	// console.log(`[URL] ${webURL.replace("https", "ws")}`);
 
     const web = new SocketIO(5758, {
         cors: {

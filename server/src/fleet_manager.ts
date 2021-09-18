@@ -1,3 +1,4 @@
+import { Drone } from './drone';
 import { DroneFleet } from './drone_fleet'
 
 export class FleetManager {
@@ -27,6 +28,6 @@ export class FleetManager {
     }
 
     toJSON() {
-        return this.fleets.forEach(e => { e });
+        return this.fleets.forEach((fleet: DroneFleet) => { fleet.drones.forEach((drone: Drone) => drone) })
     }
 }

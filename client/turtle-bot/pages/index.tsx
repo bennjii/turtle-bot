@@ -35,7 +35,7 @@ export default function Home() {
 					break;
 			}
 		})
-	}, [])
+	}, [wsInstance])
 
 	return (
 		<div className={styles.container}>
@@ -43,6 +43,7 @@ export default function Home() {
 				<h1>Fleet Manager</h1>
 
 				{
+					fleets?.length ?
 					fleets?.map((e: any) => {
 						return (
 							<div key={`FLEET-${e.name}`}>
@@ -50,6 +51,8 @@ export default function Home() {
 							</div>
 						)
 					})
+					:
+					null
 				}
 			</div>
 		</div>

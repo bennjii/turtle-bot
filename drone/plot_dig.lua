@@ -100,11 +100,12 @@ if fuelUp() then
     -- Ensure facing towards destination location.
     detectForward()
     digArea(false)
+    turtle.forward()
 
     for p = 1, plot_count do
         -- Each Plot 
         print("[PLOT] ", p)
-    
+        
         digArea(false)
         turtle.forward()
     

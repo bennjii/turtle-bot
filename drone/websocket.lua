@@ -500,7 +500,7 @@ Drone = {
     fleet_name=""
 }
 
-local ws, err = http.websocket("ws://46d3-122-60-21-26.ngrok.io");
+local ws, err = http.websocket("ws://128.199.234.165:5757/");
 
 if err then
     print(err)
