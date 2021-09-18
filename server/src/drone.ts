@@ -13,7 +13,7 @@ export class Drone {
         this.drone_name = drone_name;
         this.parent = parent;
 
-        this.ws.on('message', (data: string) => {
+        this.ws?.on('message', (data: string) => {
             const parsed: DroneUpdate = JSON.parse(data);
 
             if(parsed.type == "delete") {

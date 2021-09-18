@@ -28,6 +28,6 @@ export class FleetManager {
     }
 
     toJSON() {
-        return this.fleets.forEach((fleet: DroneFleet) => { fleet.drones.forEach((drone: Drone) => drone) })
+        return [this.fleets.forEach((fleet: DroneFleet) => { [fleet.drones.forEach((drone: Drone) => drone)] })]
     }
 }

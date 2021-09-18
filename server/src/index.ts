@@ -28,10 +28,10 @@ const fleetManager = new FleetManager(fleet);
     
         ws.on('message', (data: WebRequest) => {
             if(data.type == "request") {
-                ws.send(JSON.stringify({
+                ws.send({
                     type: "response",
                     data: fleetManager.toJSON()
-                }))
+                })
             }
         })
     })

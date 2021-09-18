@@ -41,47 +41,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ws_1 = require("ws");
 var socket_io_1 = require("socket.io");
-var ngrok_1 = require("ngrok");
+// import { connect } from 'ngrok';
 var fleet_manager_1 = require("./fleet_manager");
 var uuid_1 = require("uuid");
 var fs_1 = __importDefault(require("fs"));
 var fleet = new ws_1.Server({ port: 5757 });
 var fleetManager = new fleet_manager_1.FleetManager(fleet);
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var fleetURL, webURL, web;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, ngrok_1.connect)(5757)];
-            case 1:
-                fleetURL = _a.sent();
-                console.log("[URL] " + fleetURL.replace("https", "ws"));
-                return [4 /*yield*/, (0, ngrok_1.connect)(5758)];
-            case 2:
-                webURL = _a.sent();
-                fs_1.default.writeFileSync('../client/turtle-bot/public/ip.json', "{ \"url\": \"" + webURL + "\" }");
-                console.log("[URL] " + webURL.replace("https", "ws"));
-                web = new socket_io_1.Server(5758, {
-                    cors: {
-                        origin: true,
-                        methods: ["GET", "POST"]
+    var web, fleetId, droneId;
+    var _a;
+    return __generator(this, function (_b) {
+        // const fleetURL = await connect(5757);
+        console.log("[URL] 128.199.234.165:5757");
+        // const webURL = await connect(5758);
+        fs_1.default.writeFileSync('../client/turtle-bot/public/ip.json', "{ \"url\": \"http://128.199.234.165:5758\" }");
+        web = new socket_io_1.Server(5758, {
+            cors: {
+                origin: true,
+                methods: ["GET", "POST"]
+            }
+        });
+        fleetId = (0, uuid_1.v4)();
+        fleetManager.newDroneFleet(fleetId, "pog");
+        droneId = (0, uuid_1.v4)();
+        (_a = fleetManager.getFleet(fleetId)) === null || _a === void 0 ? void 0 : _a.addDrone(droneId, "#1 pogg drone", null);
+        console.log(fleetManager);
+        web.on('connection', function (ws) { return __awaiter(void 0, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                console.log("[CONNECTION] Web");
+                ws.on('message', function (data) {
+                    if (data.type == "request") {
+                        ws.send({
+                            type: "response",
+                            data: fleetManager.toJSON()
+                        });
                     }
                 });
-                web.on('connection', function (ws) { return __awaiter(void 0, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        console.log("[CONNECTION] Web");
-                        ws.on('message', function (data) {
-                            if (data.type == "request") {
-                                ws.send(JSON.stringify({
-                                    type: "response",
-                                    data: fleetManager
-                                }));
-                            }
-                        });
-                        return [2 /*return*/];
-                    });
-                }); });
                 return [2 /*return*/];
-        }
+            });
+        }); });
+        return [2 /*return*/];
     });
 }); })();
 fleet.on('open', function (e) {

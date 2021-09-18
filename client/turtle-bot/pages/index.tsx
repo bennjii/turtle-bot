@@ -22,14 +22,14 @@ export default function Home() {
 			}
 		})
 
-		wsInstance.on('message', (data: string) => {
-			const parsed = JSON.parse(data);
+		wsInstance.on('message', (data: any) => {
+			// const parsed = JSON.parse(data);
 
-			console.log(parsed);
+			console.log(data);
 			
-			switch(parsed.type) {
+			switch(data.type) {
 				case "response":
-					setFleets(parsed.data)
+					setFleets(data.data)
 					break;
 				default:
 					break;
@@ -44,15 +44,15 @@ export default function Home() {
 
 				{
 					fleets?.length ?
-					fleets?.map((e: any) => {
-						return (
-							<div key={`FLEET-${e.name}`}>
-								{ e?.name }
-							</div>
-						)
-					})
+						fleets?.map((e: any) => {
+							return (
+								<div key={`FLEET-${e.name}`}>
+									{ e?.name }
+								</div>
+							)
+						})
 					:
-					null
+						null
 				}
 			</div>
 		</div>

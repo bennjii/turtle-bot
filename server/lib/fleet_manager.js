@@ -22,6 +22,9 @@ var FleetManager = /** @class */ (function () {
     FleetManager.prototype.getFleetByName = function (fleet_name) {
         return this.fleets.forEach(function (e) { return e.fleet_name == fleet_name; });
     };
+    FleetManager.prototype.toJSON = function () {
+        return [this.fleets.forEach(function (fleet) { [fleet.drones.forEach(function (drone) { return drone; })]; })];
+    };
     return FleetManager;
 }());
 exports.FleetManager = FleetManager;
