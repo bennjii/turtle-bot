@@ -72,6 +72,10 @@
   justify-content: space-between;
 }
 
+.droneListElement h3 {
+  font-weight: 300;
+}
+
 .content {
   padding: 5rem;
 }
@@ -110,6 +114,25 @@
   padding: .2rem 1rem;
 }
 
+.fleetTable {
+  /* padding: 1rem; */
+  background-color: #303744;
+  border-radius: 3px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.fleetTable > div {
+  display: grid;
+  grid-template-columns: 1fr 10% 10% 10%;
+  gap: 1rem;
+  align-items: center;
+
+  padding: .2rem 1rem;
+}
+
 /* .droneTable > div:not(.tableHeader) > *:not(h3) {
   align-self: center;
   justify-self: center;
@@ -138,13 +161,43 @@
   cursor: pointer;
 }
 
-.statusOnline {
-  background-color: #41ca9f;
-  color: #063c04;
+.statusPositive {
+  background-color: #33b3d9;
+  color: #112d64;
   border-radius: 55px;
   display: flex;
   align-items: center;
 
   padding: .2rem 1rem;
   width: fit-content;
+}
+
+.statusNeutral {
+  background-color: #dbe3e12b;
+  color: #d0d1d0;
+  border-radius: 55px;
+  display: flex;
+  align-items: center;
+
+  padding: .2rem 1rem;
+  width: fit-content;
+}
+
+.trailingIdentifier {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100px;
+  text-overflow: ellipsis;
+}
+
+.inventory {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+
+  width: 60px;
+}
+
+.inventory > div {
+  height: 15px;
+  width: 15px;
 }

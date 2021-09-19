@@ -8,6 +8,7 @@ import ip from '../public/ip.json'
 import Drone from '@components/drone_component';
 import { Drone as DroneType } from '@components/drone';
 import { FleetContext } from '@components/context';
+import Fleet from '@components/fleet_component';
 
 export const isBrowser = typeof window !== "undefined";
 
@@ -58,29 +59,28 @@ export default function Home() {
 				
 				<div className={styles.contentDiv}>
 					<div>
-						<h1>Fleet</h1>
+						<h1>Fleet List</h1>
 					</div>
 					
 					<div className={styles.content}>
 						<div className={styles.droneList}>
 							<div>
-								<h2>{ fleets?.fleet_name }</h2>
-								<p>Manage fleet { fleets?.fleet_name }</p>
+								<h2>Fleet List</h2>
+								<p>Manage all fleets</p>
 							</div>
 
-							<div className={styles.droneTable}>
+							<div className={styles.fleetTable}>
 								<div className={styles.tableHeader}>
 									<p>Name</p>
-									<p>Status</p>
+									<p>Drones</p>
 									<p>Identifier</p>
-									<p>Fuel level</p>
-									<p>Execute</p>
+									<p>View</p>
 								</div>
 
 								{
-									fleets?.drones?.map((e: DroneType) => {
+									fleets?.map((e: any) => {
 										return (
-											<Drone data={e} key={e.drone_id} />
+											<Fleet fleet_id={e.fleet_id} key={`FLEET-${e.fleet_id}`} />
 										)
 									})
 								}
