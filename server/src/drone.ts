@@ -164,6 +164,42 @@ export class Drone extends EventEmitter {
 		this.fuel = await this.execute<number>('turtle.getFuelLevel()');
 	}
 
+    async mineTunnel(height: number, width: number, depth: number) {
+        for(let i = 0; i < depth; i++) {
+            const half_width = width / 2;
+
+            await this.move('forward');
+            await this.turn('left');
+
+            for(let w = 0; w < Math.floor(half_width); w++) {
+                for(let h = 0; h < height - 1; h++) {
+                    await this.dig('forward');
+                    await this.move('up');
+                }
+
+                await this.move('forward');
+            }
+
+            for(let w = 0; w < Math.floor(half_width); w++) {
+                await this.move('back')
+            }
+
+            for(let w = 0; w < Math.ceil(half_width); w++) {
+                for(let h = 0; h < height - 1; h++) {
+                    await this.dig('forward');
+                    await this.move('up');
+                }
+
+                await this.move('forward');
+            }
+
+            for(let w = 0; w < Math.ceil(half_width); w++) {
+                await this.move('back')
+            }
+        }
+        
+    }
+
     private parseDirection(prefix: string, direction: BlockDirection | TurnDirection): string {
 		switch (direction) {
 			case "forward":
