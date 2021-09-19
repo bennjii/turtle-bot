@@ -39,6 +39,8 @@ const fleetManager = new FleetManager(fleet, web);
     
                         ws.join(req_drone.drone_id)
                     }
+
+                    return;
                 }
 
                 if(req.data.fleet) {
@@ -46,6 +48,8 @@ const fleetManager = new FleetManager(fleet, web);
                         fleetManager.fleets.forEach(element => {
                             ws.join(element.fleet_id)
                         });
+
+                        console.log(fleetManager.fleets)
 
                         ws.send({
                             type: "response",
@@ -59,12 +63,15 @@ const fleetManager = new FleetManager(fleet, web);
                                 type: "response",
                                 data: req_fleet
                             });
+
+                            console.log(req_fleet);
         
                             ws.join(req_fleet.fleet_id)
                         }
                     }
+
+                    return;
                 } 
-                    
             }
 
             if(req.type == "exec") {

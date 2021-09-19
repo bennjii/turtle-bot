@@ -41,7 +41,7 @@ const Drone: React.FC<{ drone_id: string }> = ({ drone_id }) => {
                 <ArrowRight size={16} color={"#063c04"}/>
             </div> */}
             <div className={styles.takeControl} onClick={() => {
-                router.push(drone_id)
+                window.location.href += `/${drone_id}`;
                 // wsInstance.send({
                 //     type: "action",
                 //     data: {
