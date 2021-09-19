@@ -164,40 +164,47 @@ export class Drone extends EventEmitter {
 		this.fuel = await this.execute<number>('turtle.getFuelLevel()');
 	}
 
-    async mineTunnel(height: number, width: number, depth: number) {
-        for(let i = 0; i < depth; i++) {
-            const half_width = width / 2;
-
-            await this.move('forward');
-            await this.turn('left');
-
-            for(let w = 0; w < Math.floor(half_width); w++) {
-                for(let h = 0; h < height - 1; h++) {
-                    await this.dig('forward');
-                    await this.move('up');
-                }
-
-                await this.move('forward');
-            }
-
-            for(let w = 0; w < Math.floor(half_width); w++) {
-                await this.move('back')
-            }
-
-            for(let w = 0; w < Math.ceil(half_width); w++) {
-                for(let h = 0; h < height - 1; h++) {
-                    await this.dig('forward');
-                    await this.move('up');
-                }
-
-                await this.move('forward');
-            }
-
-            for(let w = 0; w < Math.ceil(half_width); w++) {
-                await this.move('back')
+    async digHeight(height: number) {
+        for(let h = 0; h < height; h++) {
+            if(h !== height - 1) {
+                await this.dig('up')
+                await this.dig('forward');
+                await this.move('up');
+            }else {
+                await this.dig('forward');
+                await this.move('up');
             }
         }
-        
+
+        for(let h = 0; h < height; h++) await this.move('down')
+    }
+
+    async digHalfRow(direction: TurnDirection, length: number) {
+        await this.turn(direction);
+
+        for(let w = 1; w < length; w++) {
+            await this.digHeight(length);
+            await this.move('forward');
+        }
+
+        for(let w = 1; w < length; w++) {
+            await this.move('back')
+        }
+
+        if(direction == 'left') await this.turn('right');
+        else await this.turn('left');
+    }
+
+    async mineTunnel(height: number, width: number, depth: number) {
+        for(let i = 0; i < depth; i++) {
+            const half_width = (width-1) / 2;
+
+            await this.digHeight(height);
+            await this.move('forward');
+
+            await this.digHalfRow('left', Math.floor(half_width));
+            await this.digHalfRow('right', Math.ceil(half_width));
+        }
     }
 
     private parseDirection(prefix: string, direction: BlockDirection | TurnDirection): string {

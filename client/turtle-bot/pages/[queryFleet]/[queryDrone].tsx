@@ -247,19 +247,19 @@ export default function Home() {
 										}
 									</div>
 
-									{/* <div className={styles.takeControl} onClick={() => {
+									<div className={styles.takeControl} onClick={() => {
 										wsInstance.send({
 											type: "action",
 											data: {
 												fleet: queryFleet,
 												drone: queryDrone,
-												query: `refuel`,
-												args: ['1']
+												query: `mineTunnel`,
+												args: ['3', '3', '3']
 											}
 										})
 									}}> 
-										Refuel
-									</div>  */}
+										MineTunnel
+									</div> 
 
 									{/* <div>
 										<input type="text" ref={input_ref} />
