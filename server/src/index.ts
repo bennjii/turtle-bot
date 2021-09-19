@@ -28,27 +28,43 @@ const fleetManager = new FleetManager(fleet, web);
     
         ws.on('message', (req: WebRequest) => {
             if(req.type == "request") {
-                if(req.data.fleet == "*") {
-                    fleetManager.fleets.forEach(element => {
-                        ws.join(element.fleet_id)
-                    });
+                if(req.data.drone) {
+                    const req_drone = fleetManager.getFleetByName(req.data.fleet)?.getDrone(req.data.drone);
 
-                    ws.send({
-                        type: "response",
-                        data: fleetManager.fleets
-                    });
-                }else {
-                    const req_fleet = fleetManager.getFleetByName(req.data.fleet);
-
-                    if(req_fleet) {
+                    if(req_drone) {
                         ws.send({
                             type: "response",
-                            data: req_fleet
+                            data: req_drone
                         });
     
-                        ws.join(req_fleet.fleet_id)
+                        ws.join(req_drone.drone_id)
                     }
                 }
+
+                if(req.data.fleet) {
+                    if(req.data.fleet == "*") {
+                        fleetManager.fleets.forEach(element => {
+                            ws.join(element.fleet_id)
+                        });
+
+                        ws.send({
+                            type: "response",
+                            data: fleetManager.fleets
+                        });
+                    }else {
+                        const req_fleet = fleetManager.getFleetByName(req.data.fleet);
+
+                        if(req_fleet) {
+                            ws.send({
+                                type: "response",
+                                data: req_fleet
+                            });
+        
+                            ws.join(req_fleet.fleet_id)
+                        }
+                    }
+                } 
+                    
             }
 
             if(req.type == "exec") {

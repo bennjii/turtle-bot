@@ -45,7 +45,7 @@ elseif ws then
         if obj.type == "setup" then
             term.clear()
             Drone = obj.data
-            print("[BOUND] "..Drone.drone_id.."("..Drone.drone_name..")")
+            print("[BOUND] "..Drone.drone_id.." ("..Drone.drone_name..")")
             print(">> TurtleOS Bound & Operational")
         end
 
