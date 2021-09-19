@@ -35,7 +35,13 @@ const fleetManager = new FleetManager(fleet);
             }
 
             if(req.type == "exec") {
-                fleetManager.getFleet(req.data.fleet_id)?.getDrone(req.data.drone_id)?.execute(req.data.query)
+                fleetManager.getFleet(req.data.fleet)?.getDrone(req.data.drone)?.execute(req.data.query)
+            }
+
+            if(req.type == "action") {
+                const drone = fleetManager.getFleet(req.data.fleet)?.getDrone(req.data.drone);
+                //@ts-expect-error
+                drone[req.data.query](...req.data.args);
             }
         })
     })

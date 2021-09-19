@@ -1,4 +1,5 @@
 interface WebRequest {
-    type: "request" | "exec",
-    data: any
+    type: "request" | "exec" | "action",
+    data: any,
+    args: any
 }

@@ -25,7 +25,8 @@ const Drone: React.FC<{ data: DroneType }> = ({ data }) => {
                     data: {
                         fleet: fleet.fleet_id,
                         drone: data.drone_id,
-                        query: `turtle.dig()`
+                        query: `turtle.refuel(1)`,
+                        args: []
                     }
                 }))
             }}> 
