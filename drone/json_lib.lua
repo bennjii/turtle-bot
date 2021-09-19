@@ -487,3 +487,5 @@ function getItemIndex(itemName)
 end
 
 return { getItemIndex=getItemIndex, json=json }
+
+-- pastebin get znVsAacQ json

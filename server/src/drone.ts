@@ -118,15 +118,14 @@ export class Drone extends EventEmitter {
     }
 
     async turn(direction: TurnDirection) {
-        const d = direction == "left" ? "turnLeft" : "turnRight";
-        let r = await this.execute<boolean>(`turtle.turn${d}()`);
+        let r = await this.execute<boolean>(`turtle.${this.parseDirection("turn", direction)}()`);
 		if (r) await this.updatePosition(direction);
 		
 		return r;
     }
 
     async dig(direction: BlockDirection) {
-		let r = await this.execute<boolean>(`turtle.dig${this.parseDirection("dig", direction)}()`);
+		let r = await this.execute<boolean>(`turtle.${this.parseDirection("dig", direction)}()`);
 		await this.updateInventory();
 		return r;
 	}
@@ -147,7 +146,7 @@ export class Drone extends EventEmitter {
 		this.fuel = await this.execute<number>('turtle.getFuelLevel()');
 	}
 
-    private parseDirection(prefix: string, direction: BlockDirection): string {
+    private parseDirection(prefix: string, direction: BlockDirection | TurnDirection): string {
 		switch (direction) {
 			case "forward":
 				return prefix;
@@ -155,6 +154,10 @@ export class Drone extends EventEmitter {
 				return prefix + 'Up';
 			case "down":
 				return prefix + 'Down';
+            case "left":
+                return prefix + 'Left';
+            case "right":
+                return prefix + 'Right';
 		}
 	}
 
