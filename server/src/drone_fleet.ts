@@ -10,9 +10,19 @@ export class DroneFleet {
         this.fleet_name = fleet_name;
     }
 
-    addDrone(drone_id: string, drone_name: string, ws: any) {
-        console.log(`[CREATE] drone.${drone_id} (${drone_name})`);
-        return this.drones.push(new Drone(drone_id, drone_name, ws, this))
+    addDrone(droneData: Partial<Drone>, ws: any) {
+        console.log(`[CREATE] drone.${droneData.drone_id} (${droneData.drone_name})`);
+        const drone = new Drone({
+            ...droneData,
+            ws
+        }, this);
+
+        drone.on('init', () => {
+            //...
+            console.log(`Drone Initialised`)
+        })
+
+        return this.drones.push(drone)
     }
 
     getDrone(drone_id: string) {

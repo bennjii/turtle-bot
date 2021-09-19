@@ -493,11 +493,16 @@ end
 
 -- main driver code 
 Drone = {
-    setup=false,
     drone_name="",
-    drone_id="",
+    drone_id=os.getComputerLabel(),
+
     fleet_id="",
-    fleet_name="default"
+    fleet_name="default",
+
+    fuel: turtle.getFuelLevel(),
+    max_fuel: turtle.getFuelLimit(),
+
+    selected_slot: turtle.getSelectedSlot()
 }
 
 local ws, err = http.websocket("ws://128.199.234.165:5757/");
@@ -509,7 +514,7 @@ elseif ws then
     Drone.drone_name = read();
 
     print("Enter Existing Fleet Name: ")
-    Drone.fleet_id = read()
+    Drone.fleet_name = read()
 
     ws.send(json.encode({
         type="setup",

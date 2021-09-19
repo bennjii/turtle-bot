@@ -26,11 +26,11 @@ const fleetManager = new FleetManager(fleet);
     web.on('connection', async (ws) => {
         console.log(`[CONNECTION] Web`);
     
-        ws.on('message', (data: WebRequest) => {
-            if(data.type == "request") {
+        ws.on('message', (req: WebRequest) => {
+            if(req.type == "request") {
                 ws.send({
                     type: "response",
-                    data: fleetManager.getFleetByName(data.data.fleet)
+                    data: fleetManager.getFleetByName(req.data.fleet)
                 })
             }
         })
@@ -50,43 +50,38 @@ fleet.on('connection', async function connection(ws) {
             const fleetExists = fleetManager.getFleet(parsed.fleet_id)
 
             if(fleetExists) {
-                const droneId = uuidv4();
-                fleetExists.addDrone(droneId, droneData.drone_name, ws);
+                fleetExists.addDrone(droneData, ws);
 
-                console.log(`Added drone to existing fleet ${fleetExists.fleet_name}`)
+                // const drone = fleetExists?.getDrone(droneData.drone_id);
 
-                const drone = fleetExists?.getDrone(droneId);
-
-                ws.send(JSON.stringify({
-                    type: "setup",
-                    data: {
-                        drone_name: drone?.drone_name,
-                        drone_id: drone?.drone_id,
-                        fleet_id: fleetExists.fleet_id,
-                        fleet_name: fleetExists.fleet_name,
-                        setup: true
-                    }
-                }));
+                // ws.send(JSON.stringify({
+                //     type: "setup",
+                //     data: {
+                //         drone_name: drone?.drone_name,
+                //         drone_id: drone?.drone_id,
+                //         fleet_id: fleetExists.fleet_id,
+                //         fleet_name: fleetExists.fleet_name,
+                //         setup: true
+                //     }
+                // }));
             }
             else {
                 const fleetId = uuidv4();
                 fleetManager.newDroneFleet(fleetId, droneData.fleet_name);
-                
-                const droneId = uuidv4();
-                fleetManager.getFleet(fleetId)?.addDrone(droneId, droneData.drone_name, ws)
+                fleetManager.getFleet(fleetId)?.addDrone(droneData, ws)
 
-                const drone = fleetManager.getFleet(fleetId)?.getDrone(droneId);
+                // const drone = fleetManager.getFleet(fleetId)?.getDrone(droneData.drone_id);
 
-                ws.send(JSON.stringify({
-                    type: "setup",
-                    data: {
-                        drone_name: drone?.drone_name,
-                        drone_id: drone?.drone_id,
-                        fleet_id: fleetId,
-                        fleet_name: fleetManager.getFleet(fleetId)?.fleet_name,
-                        setup: true
-                    }
-                }))
+                // ws.send(JSON.stringify({
+                //     type: "setup",
+                //     data: {
+                //         drone_name: drone?.drone_name,
+                //         drone_id: drone?.drone_id,
+                //         fleet_id: fleetId,
+                //         fleet_name: fleetManager.getFleet(fleetId)?.fleet_name,
+                //         setup: true
+                //     }
+                // }))
             }
         }
     })

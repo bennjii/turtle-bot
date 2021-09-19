@@ -48,9 +48,8 @@ var fs_1 = __importDefault(require("fs"));
 var fleet = new ws_1.Server({ port: 5757 });
 var fleetManager = new fleet_manager_1.FleetManager(fleet);
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var web, fleetId, droneId;
-    var _a;
-    return __generator(this, function (_b) {
+    var web;
+    return __generator(this, function (_a) {
         // const fleetURL = await connect(5757);
         console.log("[URL] 128.199.234.165:5757");
         // const webURL = await connect(5758);
@@ -61,21 +60,14 @@ var fleetManager = new fleet_manager_1.FleetManager(fleet);
                 methods: ["GET", "POST"]
             }
         });
-        fleetManager.newDroneFleet((0, uuid_1.v4)(), "fleet alpha");
-        fleetManager.newDroneFleet((0, uuid_1.v4)(), "fleet beta");
-        fleetId = (0, uuid_1.v4)();
-        fleetManager.newDroneFleet(fleetId, "default");
-        droneId = (0, uuid_1.v4)();
-        (_a = fleetManager.getFleet(fleetId)) === null || _a === void 0 ? void 0 : _a.addDrone(droneId, "#1 pogg drone", null);
-        console.log(fleetManager.getFleetByName("default"));
         web.on('connection', function (ws) { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 console.log("[CONNECTION] Web");
-                ws.on('message', function (data) {
-                    if (data.type == "request") {
+                ws.on('message', function (req) {
+                    if (req.type == "request") {
                         ws.send({
                             type: "response",
-                            data: fleetManager.getFleetByName(data.data.fleet)
+                            data: fleetManager.getFleetByName(req.data.fleet)
                         });
                     }
                 });
@@ -90,44 +82,41 @@ fleet.on('connection', function connection(ws) {
         return __generator(this, function (_a) {
             console.log("[CONNECTION] Drone");
             ws.on('message', function (data) {
-                var _a, _b, _c;
+                var _a;
                 var parsed = JSON.parse(data);
                 if (parsed.type == "setup") {
                     var droneData = parsed.data;
                     //@ts-expect-error
                     var fleetExists = fleetManager.getFleet(parsed.fleet_id);
                     if (fleetExists) {
-                        var droneId = (0, uuid_1.v4)();
-                        fleetExists.addDrone(droneId, droneData.drone_name, ws);
-                        console.log("Added drone to existing fleet " + fleetExists.fleet_name);
-                        var drone = fleetExists === null || fleetExists === void 0 ? void 0 : fleetExists.getDrone(droneId);
-                        ws.send(JSON.stringify({
-                            type: "setup",
-                            data: {
-                                drone_name: drone === null || drone === void 0 ? void 0 : drone.drone_name,
-                                drone_id: drone === null || drone === void 0 ? void 0 : drone.drone_id,
-                                fleet_id: fleetExists.fleet_id,
-                                fleet_name: fleetExists.fleet_name,
-                                setup: true
-                            }
-                        }));
+                        fleetExists.addDrone(droneData, ws);
+                        // const drone = fleetExists?.getDrone(droneData.drone_id);
+                        // ws.send(JSON.stringify({
+                        //     type: "setup",
+                        //     data: {
+                        //         drone_name: drone?.drone_name,
+                        //         drone_id: drone?.drone_id,
+                        //         fleet_id: fleetExists.fleet_id,
+                        //         fleet_name: fleetExists.fleet_name,
+                        //         setup: true
+                        //     }
+                        // }));
                     }
                     else {
                         var fleetId = (0, uuid_1.v4)();
                         fleetManager.newDroneFleet(fleetId, droneData.fleet_name);
-                        var droneId = (0, uuid_1.v4)();
-                        (_a = fleetManager.getFleet(fleetId)) === null || _a === void 0 ? void 0 : _a.addDrone(droneId, droneData.drone_name, ws);
-                        var drone = (_b = fleetManager.getFleet(fleetId)) === null || _b === void 0 ? void 0 : _b.getDrone(droneId);
-                        ws.send(JSON.stringify({
-                            type: "setup",
-                            data: {
-                                drone_name: drone === null || drone === void 0 ? void 0 : drone.drone_name,
-                                drone_id: drone === null || drone === void 0 ? void 0 : drone.drone_id,
-                                fleet_id: fleetId,
-                                fleet_name: (_c = fleetManager.getFleet(fleetId)) === null || _c === void 0 ? void 0 : _c.fleet_name,
-                                setup: true
-                            }
-                        }));
+                        (_a = fleetManager.getFleet(fleetId)) === null || _a === void 0 ? void 0 : _a.addDrone(droneData, ws);
+                        // const drone = fleetManager.getFleet(fleetId)?.getDrone(droneData.drone_id);
+                        // ws.send(JSON.stringify({
+                        //     type: "setup",
+                        //     data: {
+                        //         drone_name: drone?.drone_name,
+                        //         drone_id: drone?.drone_id,
+                        //         fleet_id: fleetId,
+                        //         fleet_name: fleetManager.getFleet(fleetId)?.fleet_name,
+                        //         setup: true
+                        //     }
+                        // }))
                     }
                 }
             });
