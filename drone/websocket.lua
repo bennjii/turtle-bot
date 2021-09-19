@@ -523,13 +523,13 @@ elseif ws then
 
     while true do
         local message = ws.receive()
-        print(message)
+        -- print(message)
 
         if message == nil then
             break
         end
 
-        print(message)
+        -- print(message)
         local obj = json.decode(message)
         
         if obj.type == "setup" then
@@ -541,8 +541,11 @@ elseif ws then
 
         if obj.type == "eval" then
             local func = loadstring(obj['function'])
-            local result = func()
-            ws.send(json.encode({type="run",data=result, nonce=obj.nonce}))
+            print(obj['function'])
+            print(func)
+
+            -- local result = func()
+            -- ws.send(json.encode({type="res",data=result, nonce=obj.nonce}))
         end
     end
 end
