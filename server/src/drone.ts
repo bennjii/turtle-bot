@@ -182,12 +182,12 @@ export class Drone extends EventEmitter {
     async digHalfRow(direction: TurnDirection, length: number) {
         await this.turn(direction);
 
-        for(let w = 1; w < length; w++) {
+        for(let w = 1; w <= length; w++) {
             await this.digHeight(length);
             await this.move('forward');
         }
 
-        for(let w = 1; w < length; w++) {
+        for(let w = 1; w <= length; w++) {
             await this.move('back')
         }
 
