@@ -85,9 +85,6 @@ var fleetManager = new fleet_manager_1.FleetManager(fleet);
         return [2 /*return*/];
     });
 }); })();
-fleet.on('open', function (e) {
-    console.log("[OPEN] MC Drone Fleet Initized", e);
-});
 fleet.on('connection', function connection(ws) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

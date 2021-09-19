@@ -4,7 +4,7 @@ import { DroneFleet } from "./drone_fleet";
 export class Drone {
     drone_id: string;
     drone_name: string;
-    ws: any;
+    ws: WebSocket;
     parent: DroneFleet;
 
     constructor(drone_id: string, drone_name: string, socket: WebSocket, parent: DroneFleet) {
