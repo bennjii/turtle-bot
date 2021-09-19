@@ -76,7 +76,7 @@ const fleetManager = new FleetManager(fleet, web);
 
             if(req.type == "action") {
                 const drone = fleetManager.getFleet(req.data.fleet)?.getDrone(req.data.drone);
-                console.log(`${req.data.query}(${[...req.data.args]})`)
+                console.log(`${req.data.query}(${[...req.data.args]})  on ${req.data.fleet} - ${req.data.drone}`)
                 
                 //@ts-expect-error
                 drone[req.data.query](...req.data.args);
