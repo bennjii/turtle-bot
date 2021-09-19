@@ -499,10 +499,10 @@ Drone = {
     fleet_id="",
     fleet_name="default",
 
-    fuel: turtle.getFuelLevel(),
-    max_fuel: turtle.getFuelLimit(),
+    fuel=turtle.getFuelLevel(),
+    max_fuel=turtle.getFuelLimit(),
 
-    selected_slot: turtle.getSelectedSlot()
+    selected_slot=turtle.getSelectedSlot()
 }
 
 local ws, err = http.websocket("ws://128.199.234.165:5757/");

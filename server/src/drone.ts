@@ -54,6 +54,12 @@ export class Drone extends EventEmitter {
 
         (async () => {
             await this.updateInventory();
+
+            this.ws.send(JSON.stringify({
+                type: "setup",
+                data: this.toJSON()
+            }));
+            
             this.emit('init');
         })
 
