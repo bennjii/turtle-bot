@@ -30,16 +30,13 @@ const fleetManager = new FleetManager(fleet);
             if(data.type == "request") {
                 ws.send({
                     type: "response",
-                    data: fleetManager.toJSON()
+                    data: fleetManager.getFleetByName(data.data.fleet)
                 })
             }
         })
     })
 })();
 
-fleet.on('open', (e) => {
-    console.log("[OPEN] MC Drone Fleet Initized", e)
-});
 
 fleet.on('connection', async function connection(ws) {
     console.log(`[CONNECTION] Drone`)

@@ -61,11 +61,13 @@ var fleetManager = new fleet_manager_1.FleetManager(fleet);
                 methods: ["GET", "POST"]
             }
         });
+        fleetManager.newDroneFleet((0, uuid_1.v4)(), "fleet alpha");
+        fleetManager.newDroneFleet((0, uuid_1.v4)(), "fleet beta");
         fleetId = (0, uuid_1.v4)();
-        fleetManager.newDroneFleet(fleetId, "pog");
+        fleetManager.newDroneFleet(fleetId, "default");
         droneId = (0, uuid_1.v4)();
         (_a = fleetManager.getFleet(fleetId)) === null || _a === void 0 ? void 0 : _a.addDrone(droneId, "#1 pogg drone", null);
-        console.log(fleetManager);
+        console.log(fleetManager.getFleetByName("default"));
         web.on('connection', function (ws) { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 console.log("[CONNECTION] Web");
@@ -73,7 +75,7 @@ var fleetManager = new fleet_manager_1.FleetManager(fleet);
                     if (data.type == "request") {
                         ws.send({
                             type: "response",
-                            data: fleetManager.toJSON()
+                            data: fleetManager.getFleetByName(data.data.fleet)
                         });
                     }
                 });

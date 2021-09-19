@@ -6,6 +6,6 @@ export declare class FleetManager {
     newDroneFleet(fleet_id: string, fleet_name: string): Map<string, DroneFleet>;
     removeDroneFleet(fleet_id: string): boolean;
     getFleet(fleet_id: string): DroneFleet | undefined;
-    getFleetByName(fleet_name: string): void;
+    getFleetByName(fleet_name: string): DroneFleet;
     toJSON(): void[];
 }

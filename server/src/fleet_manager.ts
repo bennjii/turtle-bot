@@ -24,7 +24,8 @@ export class FleetManager {
     }
 
     getFleetByName(fleet_name: string) {
-        return this.fleets.forEach(e => e.fleet_name == fleet_name)
+        const filtered = [...this.fleets].filter(([__, v]) => v.fleet_name == fleet_name)
+        return filtered[0][1];
     }
 
     toJSON() {

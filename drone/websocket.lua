@@ -497,7 +497,7 @@ Drone = {
     drone_name="",
     drone_id="",
     fleet_id="",
-    fleet_name=""
+    fleet_name="default"
 }
 
 local ws, err = http.websocket("ws://128.199.234.165:5757/");

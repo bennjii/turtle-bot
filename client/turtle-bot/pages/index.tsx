@@ -18,7 +18,7 @@ export default function Home() {
 		wsInstance.send({
 			type: "request",
 			data: {
-				fleet: "*",
+				fleet: "default",
 			}
 		})
 
