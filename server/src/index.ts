@@ -33,6 +33,10 @@ const fleetManager = new FleetManager(fleet);
                     data: fleetManager.getFleetByName(req.data.fleet)
                 })
             }
+
+            if(req.type == "exec") {
+                fleetManager.getFleet(req.data.fleet_id)?.getDrone(req.data.drone_id)?.execute(req.data.query)
+            }
         })
     })
 })();
