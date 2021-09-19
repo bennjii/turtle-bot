@@ -1,3 +1,4 @@
+import WebSocket from 'ws';
 import { Drone } from './drone'
 
 export class DroneFleet {
@@ -10,12 +11,13 @@ export class DroneFleet {
         this.fleet_name = fleet_name;
     }
 
-    addDrone(droneData: Partial<Drone>, ws: any) {
+    addDrone(droneData: Partial<Drone>, ws: WebSocket) {
         console.log(`[CREATE] drone.${droneData.drone_id} (${droneData.drone_name})`);
         const drone = new Drone({
-            ...droneData,
-            ws: ws
-        }, this);
+            ...droneData
+        }, ws, this);
+
+        console.log("Passed WS", ws);
 
         drone.on('init', () => {
             //...

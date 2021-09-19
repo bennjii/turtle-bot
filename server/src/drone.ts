@@ -40,11 +40,11 @@ export class Drone extends EventEmitter {
     fuel: number;
     max_fuel: number;
 
-    constructor(json: any, parent: DroneFleet) {
+    constructor(json: any, ws: WebSocket, parent: DroneFleet) {
         super();
         this.parent = parent;
 
-        this.ws = json.ws;
+        this.ws = ws;
         this.fuel = json.fuel;
         this.max_fuel = json.max_fuel;
         this.drone_id = json.drone_id;
@@ -53,16 +53,16 @@ export class Drone extends EventEmitter {
         this.selected_slot = json.selected_slot;
 
         (async () => {
-            console.log("NEW DRONE SOCKET", this.ws);
+            console.log("NEW DRONE SOCKET", ws);
             await this.updateInventory();
 
-            this.ws.send(JSON.stringify({
+            ws.send(JSON.stringify({
                 type: "setup",
                 data: this.toJSON()
             }));
 
             this.emit('init');
-        })
+        })();
 
         this.ws?.on('message', (data: string) => {
             const parsed: DroneUpdate = JSON.parse(data);
