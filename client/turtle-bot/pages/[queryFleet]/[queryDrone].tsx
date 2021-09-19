@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 
 import ip from '../../public/ip.json'
 import Drone from '@components/drone_component';
-import { Drone as DroneType } from '@components/drone';
+import { Drone as DroneType, Slot } from '@components/drone';
 import { DroneContext, FleetContext } from '@components/context';
 import { useRouter } from 'next/router';
 import { ArrowRight } from 'react-feather';
@@ -75,22 +75,21 @@ export default function Home() {
 								<p>Manage drone, { drone?.drone_name }</p>
 							</div>
 
-							<div>
+							<div className={styles.droneContent}>
 								<div className={styles.inventory}>
 									{
-										drone?.inventory?.map((e, i) => {
+										drone?.inventory?.map((e: Slot, i: number) => {
 											return (
-												<div key={`${queryDrone}.INV.${i}`}>
-													{
-														e.count
-													}
+												<div key={`${queryDrone}.INV.${i}`} className={i == drone.selected_slot ? styles.selectedSlot : styles.inactiveItem}>
+													{ drone.selected_slot }
+													{ e.count }
 												</div>
 											)
 										})
 									}
 								</div>
 
-                                <div className={styles.takeControl} onClick={() => {
+                                {/* <div className={styles.takeControl} onClick={() => {
 									wsInstance.send({
 										type: "action",
 										data: {
@@ -102,7 +101,7 @@ export default function Home() {
 									})
 								}}> 
 									Refuel
-								</div> 
+								</div>  */}
 
 								<div>
 									<input type="text" ref={input_ref} />
@@ -116,7 +115,7 @@ export default function Home() {
 												query: input_ref.current.value
 											}
 										})
-									}}></button>
+									}}>Execute</button>
 								</div>
                             </div>
 						</div>

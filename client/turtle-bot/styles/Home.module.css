@@ -193,11 +193,24 @@
 .inventory {
   display: grid;
   grid-template-columns: auto auto auto auto;
+  gap: 1rem;
+  padding: 1rem;
 
-  width: 60px;
+  width: fit-content;
+  background-color: #303744;
+  border-radius: 3px;
+}
+
+.selectedSlot {
+  background-color: #33b3d9;
 }
 
 .inventory > div {
   height: 15px;
   width: 15px;
+}
+
+.droneContent {
+  display: flex;
+  flex-direction: row;
 }

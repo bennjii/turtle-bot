@@ -103,7 +103,7 @@ export class Drone extends EventEmitter {
             drone_name: this.drone_name,
 
 			inventory: this.inventory,
-			selectedSlot: this.selected_slot,
+			selected_slot: this.selected_slot,
 
 			fuel: this.fuel,
 			max_fuel: this.max_fuel,
