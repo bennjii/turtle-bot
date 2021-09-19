@@ -34,7 +34,7 @@ const fleetManager = new FleetManager(fleet, web);
                     });
                 }else {
                     const req_fleet = fleetManager.getFleetByName(req.data.fleet);
-                    
+
                     if(req_fleet) {
                         ws.send({
                             type: "response",
@@ -52,6 +52,8 @@ const fleetManager = new FleetManager(fleet, web);
 
             if(req.type == "action") {
                 const drone = fleetManager.getFleet(req.data.fleet)?.getDrone(req.data.drone);
+                console.log(`${req.data.query}(${[...req.data.args]})`)
+                
                 //@ts-expect-error
                 drone[req.data.query](...req.data.args);
             }

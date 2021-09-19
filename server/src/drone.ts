@@ -93,6 +93,7 @@ export class Drone extends EventEmitter {
             };
 
             this.ws.on('message', listener);
+            this.emit('update')
         })   
     }
 
