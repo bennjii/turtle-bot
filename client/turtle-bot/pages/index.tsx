@@ -5,11 +5,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { io } from "socket.io-client";
 
 import ip from '../public/ip.json'
+import Drone from '@components/drone_component';
+import { Drone as DroneType } from '@components/drone';
 
 export const isBrowser = typeof window !== "undefined";
 
 export default function Home() {
-	const [ fleets, setFleets ] = useState(null);
+	const [ fleet, setFleet ] = useState(null);
 	const wsInstance = useMemo(() => isBrowser ? io(ip.url) : null, []);
 
 	useEffect(() => {
@@ -29,7 +31,7 @@ export default function Home() {
 			
 			switch(data.type) {
 				case "response":
-					setFleets(data.data)
+					setFleet(data.data)
 					break;
 				default:
 					break;
@@ -40,19 +42,16 @@ export default function Home() {
 	return (
 		<div className={styles.container}>
 			<div>
-				<h1>Fleet Manager</h1>
 
+			</div>
+
+			<div>
 				{
-					fleets?.length ?
-						fleets?.map((e: any) => {
-							return (
-								<div key={`FLEET-${e.name}`}>
-									{ e?.name }
-								</div>
-							)
-						})
-					:
-						null
+					fleet?.drones?.map((e: DroneType) => {
+						return (
+							<Drone data={e} key={e.drone_id} />
+						)
+					})
 				}
 			</div>
 		</div>

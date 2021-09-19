@@ -59,7 +59,7 @@ export class Drone extends EventEmitter {
                 type: "setup",
                 data: this.toJSON()
             }));
-            
+
             this.emit('init');
         })
 
@@ -105,7 +105,7 @@ export class Drone extends EventEmitter {
 			selectedSlot: this.selected_slot,
 
 			fuel: this.fuel,
-			maxFuel: this.max_fuel,
+			max_fuel: this.max_fuel,
         }
     }
 
