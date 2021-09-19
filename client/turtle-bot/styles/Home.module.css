@@ -193,7 +193,6 @@
 .inventory {
   display: grid;
   grid-template-columns: auto auto auto auto;
-  gap: 1rem;
   padding: 1rem;
 
   width: fit-content;
@@ -202,15 +201,55 @@
 }
 
 .selectedSlot {
-  background-color: #33b3d9;
+  background-color: #33b3d9 !important;
 }
 
 .inventory > div {
-  height: 15px;
-  width: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 20px;
+  width: 20px;
+
+  border-radius: 3px;
+
+  /* background-color: #19191f; */
 }
 
 .droneContent {
   display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.droneToolbar {
+  display: flex;
   flex-direction: row;
+}
+
+.droneToolbar > .droneAction {
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid #303744; */
+  /* border-radius: 5px; */
+}
+
+.droneToolbar > .droneAction > * {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #303744;
+  /* border-radius: 5px; */
+  width: 100%;
+  cursor: pointer;
+
+  padding: 1rem;
+}
+
+.droneToolbar > .droneAction > *:not(:first-of-type):not(:last-of-type) {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #303744;
+  border-radius: 0px;
+  width: 100%;
 }

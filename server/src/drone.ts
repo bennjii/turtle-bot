@@ -130,6 +130,24 @@ export class Drone extends EventEmitter {
 		return r;
 	}
 
+    async place(direction: BlockDirection) {
+		let r = await this.execute<boolean>(`turtle.${this.parseDirection("place", direction)}()`);
+		await this.updateInventory();
+		return r;
+	}
+
+    async suck(direction: BlockDirection) {
+		let r = await this.execute<boolean>(`turtle.${this.parseDirection("suck", direction)}()`);
+		await this.updateInventory();
+		return r;
+	}
+
+    async drop(direction: BlockDirection) {
+		let r = await this.execute<boolean>(`turtle.${this.parseDirection("drop", direction)}()`);
+		await this.updateInventory();
+		return r;
+	}
+
     async refuel(ammount?: number) {
 		let r = await this.execute<boolean>(`turtle.refuel(${typeof ammount === 'number' ? count.toString() : ''})`);
 		this.fuel = await this.execute<number>('turtle.getFuelLevel()');
