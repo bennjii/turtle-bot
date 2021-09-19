@@ -53,6 +53,7 @@ export class Drone extends EventEmitter {
         this.selected_slot = json.selected_slot;
 
         (async () => {
+            console.log("NEW DRONE SOCKET", this.ws);
             await this.updateInventory();
 
             this.ws.send(JSON.stringify({

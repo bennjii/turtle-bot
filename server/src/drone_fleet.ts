@@ -14,7 +14,7 @@ export class DroneFleet {
         console.log(`[CREATE] drone.${droneData.drone_id} (${droneData.drone_name})`);
         const drone = new Drone({
             ...droneData,
-            ws
+            ws: ws
         }, this);
 
         drone.on('init', () => {
