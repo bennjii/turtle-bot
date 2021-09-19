@@ -32,6 +32,11 @@ const fleetManager = new FleetManager(fleet, web);
                     fleetManager.fleets.forEach(element => {
                         ws.join(element.fleet_id)
                     });
+
+                    ws.send({
+                        type: "response",
+                        data: fleetManager.fleets
+                    });
                 }else {
                     const req_fleet = fleetManager.getFleetByName(req.data.fleet);
 

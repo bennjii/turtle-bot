@@ -8,11 +8,15 @@ import ip from '../public/ip.json'
 import Drone from '@components/drone_component';
 import { Drone as DroneType } from '@components/drone';
 import { FleetContext } from '@components/context';
+import { useRouter } from 'next/router';
 
 export const isBrowser = typeof window !== "undefined";
 
 export default function Home() {
-	const [ fleets, setFleets ] = useState(null);
+    const router = useRouter()
+    const { queryFleet } = router.query
+
+	const [ fleet, setFleet ] = useState(null);
 	const wsInstance = useMemo(() => isBrowser ? io(ip.url) : null, []);
 
 	useEffect(() => {
@@ -21,29 +25,30 @@ export default function Home() {
 		wsInstance.send({
 			type: "request",
 			data: {
-				fleet: "*",
+				fleet: queryFleet,
 			}
 		})
 
 		wsInstance.on('message', (data: any) => {
 			// const parsed = JSON.parse(data);
+
 			console.log(data);
 			
 			switch(data.type) {
 				case "response":
-					setFleets(data.data)
+					setFleet(data.data)
 					break;
 				case "update":
-					setFleets(data.data)
+					setFleet(data.data)
 					break;
 				default:
 					break;
 			}
 		})
-	}, [wsInstance])
+	}, [wsInstance, queryFleet])
 
 	return (
-		<FleetContext.Provider value={{ wsInstance, fleet: fleets }}>
+		<FleetContext.Provider value={{ wsInstance, fleet: fleet }}>
 			<div className={styles.container}>
 				<div className={styles.header}>
 					<div>
@@ -64,8 +69,8 @@ export default function Home() {
 					<div className={styles.content}>
 						<div className={styles.droneList}>
 							<div>
-								<h2>{ fleets?.fleet_name }</h2>
-								<p>Manage fleet { fleets?.fleet_name }</p>
+								<h2>{ fleet?.fleet_name }</h2>
+								<p>Manage fleet { fleet?.fleet_name }</p>
 							</div>
 
 							<div className={styles.droneTable}>
@@ -78,9 +83,9 @@ export default function Home() {
 								</div>
 
 								{
-									fleets?.drones?.map((e: DroneType) => {
+									fleet?.drones?.map((e: DroneType) => {
 										return (
-											<Drone data={e} key={e.drone_id} />
+											<Drone drone_id={e.drone_id} key={e.drone_id} />
 										)
 									})
 								}

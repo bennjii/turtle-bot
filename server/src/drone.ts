@@ -161,9 +161,10 @@ export class Drone extends EventEmitter {
 		}
 	}
 
+    //@ts-ignore
     async updatePosition(direction: MovementDirection | TurnDirection) {
         // Future planning for creating a mapping protocol.
-        console.log(direction);
+        // console.log(direction);
         this.emit('update');
 
         return true;

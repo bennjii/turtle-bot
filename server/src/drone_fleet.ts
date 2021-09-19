@@ -20,12 +20,10 @@ export class DroneFleet extends EventEmitter {
         }, ws, this);
 
         drone.on('init', () => {
-            //...
             console.log(`Drone Initialised`)
         });
 
         drone.on('update', () => {
-            console.log(`Drone Element Changed`)
             this.emit('update')
         });
 

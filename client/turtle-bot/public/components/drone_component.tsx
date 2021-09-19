@@ -1,11 +1,17 @@
 import { Drone as DroneType } from "./drone";
 import styles from "../../styles/Home.module.css"
 import { ArrowRight } from "react-feather";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FleetContext } from "./context";
 
-const Drone: React.FC<{ data: DroneType }> = ({ data }) => {
+const Drone: React.FC<{ drone_id: string }> = ({ drone_id }) => {
     const { wsInstance, fleet } = useContext(FleetContext);
+
+    const [ data, setData ] = useState(fleet.drones.find(e => e.drone_id == drone_id));
+
+    // useEffect(() => {
+        
+    // }, [fleet.drones])
 
     return (
         <div className={styles.droneListElement}>
@@ -25,8 +31,8 @@ const Drone: React.FC<{ data: DroneType }> = ({ data }) => {
                     data: {
                         fleet: fleet.fleet_id,
                         drone: data.drone_id,
-                        query: `turn`,
-                        args: ['left']
+                        query: `refuel`,
+                        args: ['1']
                     }
                 })
             }}> 
