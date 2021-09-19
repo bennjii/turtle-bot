@@ -49,8 +49,6 @@ const fleetManager = new FleetManager(fleet, web);
                             ws.join(element.fleet_id)
                         });
 
-                        console.log(fleetManager.fleets)
-
                         ws.send({
                             type: "response",
                             data: fleetManager.fleets
@@ -63,8 +61,6 @@ const fleetManager = new FleetManager(fleet, web);
                                 type: "response",
                                 data: req_fleet
                             });
-
-                            console.log(req_fleet);
         
                             ws.join(req_fleet.fleet_id)
                         }

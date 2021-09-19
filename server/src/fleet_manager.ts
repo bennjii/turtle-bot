@@ -38,14 +38,9 @@ export class FleetManager {
 
     getFleetByName(fleet_name: string) {
         return this.fleets.find(fleet => fleet.fleet_name == fleet_name)
-        // const filtered = ([...this.fleets].filter(([__, v]) => v.fleet_name == fleet_name))[0][1]
-        // filtered.drones = [...filtered.drones]
-    
-        // return filtered;
     }
 
     toJSON() {
         return this;
-        // return [this.fleets.forEach((fleet: DroneFleet) => { [fleet.drones.forEach((drone: Drone) => drone)] })]
     }
 }
