@@ -1,12 +1,14 @@
+import EventEmitter from 'events';
 import WebSocket from 'ws';
 import { Drone } from './drone'
 
-export class DroneFleet {
+export class DroneFleet extends EventEmitter {
     fleet_id: string;
     fleet_name: string;
     drones: Drone[] = [];
 
     constructor(fleet_id: string, fleet_name: string) {
+        super();
         this.fleet_id = fleet_id;
         this.fleet_name = fleet_name;
     }
@@ -20,7 +22,12 @@ export class DroneFleet {
         drone.on('init', () => {
             //...
             console.log(`Drone Initialised`)
-        })
+        });
+
+        drone.on('update', () => {
+            console.log(`Drone Element Changed`)
+            this.emit('update')
+        });
 
         return this.drones.push(drone)
     }

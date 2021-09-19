@@ -20,7 +20,7 @@ const Drone: React.FC<{ data: DroneType }> = ({ data }) => {
             </div>
 
             <div className={styles.takeControl} onClick={() => {
-                wsInstance.send(JSON.stringify({
+                wsInstance.send({
                     type: "exec",
                     data: {
                         fleet: fleet.fleet_id,
@@ -28,7 +28,7 @@ const Drone: React.FC<{ data: DroneType }> = ({ data }) => {
                         query: `turtle.refuel(1)`,
                         args: []
                     }
-                }))
+                })
             }}> 
                 Run
                 <ArrowRight size={16} color={"#063c04"}/>

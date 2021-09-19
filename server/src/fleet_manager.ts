@@ -1,17 +1,27 @@
 // import { Drone } from './drone';
+import { Server as SocketIO } from 'socket.io';
+import { Server } from 'ws';
 import { DroneFleet } from './drone_fleet'
 
 export class FleetManager {
-    io;
+    io: Server;
+    web: SocketIO;
     fleets: DroneFleet[] = [];
 
-    constructor(io: any) {
+    constructor(io: Server, web: SocketIO) {
         this.io = io;
+        this.web = web;
     }
 
     newDroneFleet(fleet_id: string, fleet_name: string) {
         console.log(`[CREATE] fleet.${fleet_id} (${fleet_name})`);
-        return this.fleets.push(new DroneFleet(fleet_id, fleet_name));
+        const fleet = new DroneFleet(fleet_id, fleet_name);
+
+        fleet.on('update', () => {
+            this.web.sockets.in(fleet.fleet_id).emit('message', fleet)
+        });
+
+        return this.fleets.push(fleet);
     }
 
     removeDroneFleet(fleet_id: string) {

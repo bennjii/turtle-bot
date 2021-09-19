@@ -134,6 +134,7 @@ export class Drone extends EventEmitter {
 		let r = await this.execute<boolean>(`turtle.refuel(${typeof ammount === 'number' ? count.toString() : ''})`);
 		this.fuel = await this.execute<number>('turtle.getFuelLevel()');
 		await this.updateInventory();
+
 		return r;
 	}
 
