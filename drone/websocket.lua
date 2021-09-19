@@ -541,11 +541,9 @@ elseif ws then
 
         if obj.type == "eval" then
             local func = loadstring(obj['function'])
-            print(obj['function'])
-            print(func)
 
-            -- local result = func()
-            -- ws.send(json.encode({type="res",data=result, nonce=obj.nonce}))
+            local result = func()
+            ws.send(json.encode({type="res",data=result, nonce=obj.nonce}))
         end
     end
 end
