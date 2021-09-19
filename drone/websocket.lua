@@ -543,11 +543,10 @@ elseif ws then
             local func = loadstring(obj['function'])
             local result = func()
             ws.send(json.encode({type="run",data=result, nonce=obj.nonce}))
-        elseif obj.type == "fuel" then
-            fuelMachine();
         end
     end
 end
+
 if ws then
     ws.send(json.encode({
         type="delete",

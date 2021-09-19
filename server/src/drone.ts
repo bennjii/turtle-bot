@@ -44,7 +44,7 @@ export class Drone extends EventEmitter {
         super();
         this.parent = parent;
 
-        this.ws = json.socket;
+        this.ws = json.ws;
         this.fuel = json.fuel;
         this.max_fuel = json.max_fuel;
         this.drone_id = json.drone_id;
