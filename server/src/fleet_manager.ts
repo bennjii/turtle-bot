@@ -15,13 +15,13 @@ export class FleetManager {
 
     newDroneFleet(fleet_id: string, fleet_name: string) {
         console.log(`[CREATE] fleet.${fleet_id} (${fleet_name})`);
-        const fleet = new DroneFleet(fleet_id, fleet_name);
+        const fleet = new DroneFleet(fleet_id, fleet_name, this.web);
 
         fleet.on('update', () => {
             this.web.sockets.in(fleet.fleet_id).emit('message', {
                 type: "update",
                 data: fleet
-            })
+            });
         });
 
         return this.fleets.push(fleet);
