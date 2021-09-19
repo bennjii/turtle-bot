@@ -17,8 +17,6 @@ export class DroneFleet {
             ...droneData
         }, ws, this);
 
-        console.log("Passed WS", ws);
-
         drone.on('init', () => {
             //...
             console.log(`Drone Initialised`)
