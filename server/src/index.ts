@@ -99,13 +99,13 @@ fleet.on('connection', async function connection(ws) {
         if(parsed.type == "setup") {
             const droneData = parsed.data;
             //@ts-expect-error
-            const fleetExists = fleetManager.getFleet(parsed.fleet_id)
+            const fleetExists = fleetManager.getFleetByName(parsed.fleet_name)
 
             if(fleetExists) {
                 fleetExists.addDrone(droneData, ws);
-            }
-            else {
+            } else {
                 const fleetId = uuidv4();
+                
                 fleetManager.newDroneFleet(fleetId, droneData.fleet_name);
                 fleetManager.getFleet(fleetId)?.addDrone(droneData, ws)
             }
