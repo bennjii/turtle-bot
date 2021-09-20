@@ -10,6 +10,7 @@ import { Drone as DroneType, Slot } from '@components/drone';
 import { DroneContext, FleetContext } from '@components/context';
 import { useRouter } from 'next/router';
 import { ArrowDown, ArrowRight, ArrowUp } from 'react-feather';
+import ActionMenu from '@components/action_menu';
 
 export const isBrowser = typeof window !== "undefined";
 
@@ -56,7 +57,7 @@ export default function Home() {
 	const input_ref = useRef<HTMLInputElement>(null);
 
 	return (
-		<DroneContext.Provider value={{ wsInstance, drone: drone }}>
+		<DroneContext.Provider value={{ wsInstance, drone: drone, fleet_id: queryFleet?.toString() }}>
 			<div className={styles.container}>
 				<div className={styles.header}>
 					<div>
@@ -78,163 +79,56 @@ export default function Home() {
 						<div className={styles.droneList}>
 							<div>
 								<h2>{ drone?.drone_name }</h2>
+								<div className={drone?.online  ? styles.statusPositive : styles.statusNeutral}>
+									{
+										drone?.online ? "Online" : "Offline"
+									}
+								</div>
 								<p>Manage drone, { drone?.drone_name } (#{ drone?.drone_id })</p>
 							</div>
 
 							<div className={styles.droneContent}>
 								<div className={styles.droneToolbar}>
-									<div className={styles.droneAction}>
-										<ArrowUp onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `dig`,
-													args: ['up']
-												}
-											})
-										}/>
+									<div>
+										<ActionMenu name={"DIG"} action={"dig"} />
 
-										<div onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `dig`,
-													args: ['forward']
-												}
-											})
-										}>Dig</div>
+										<ActionMenu name={"PLACE"} action={"place"} />
 
-										<ArrowDown onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `dig`,
-													args: ['down']
-												}
-											})
-										}/>
+										<ActionMenu name={"SUCK"} action={"suck"} />
+
+										<ActionMenu name={"DROP"} action={"drop"} />
 									</div>
 
-									<div className={styles.droneAction}>
-										<ArrowUp onClick={() => 
+									<div>
+										<div className={styles.takeControl} onClick={() => {
 											wsInstance.send({
 												type: "action",
 												data: {
 													fleet: queryFleet,
 													drone: queryDrone,
-													query: `place`,
-													args: ['up']
+													query: `mineTunnel`,
+													args: ['8', '17', '17']
 												}
 											})
-										}/>
+										}}> 
+											Mine Tunnel
+										</div> 
 
-										<div onClick={() => 
+										<div className={styles.takeControl} onClick={() => {
 											wsInstance.send({
 												type: "action",
 												data: {
 													fleet: queryFleet,
 													drone: queryDrone,
-													query: `place`,
-													args: ['forward']
+													query: `refuel`,
+													args: ['']
 												}
 											})
-										}>Place</div>
-
-										<ArrowDown onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `place`,
-													args: ['down']
-												}
-											})
-										}/>
+										}}> 
+											Refuel
+										</div>
 									</div>
-
-									<div className={styles.droneAction}>
-										<ArrowUp onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `suck`,
-													args: ['up']
-												}
-											})
-										}/>
-
-										<div onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `suck`,
-													args: ['forward']
-												}
-											})
-										}>Suck</div>
-
-										<ArrowDown onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `suck`,
-													args: ['down']
-												}
-											})
-										}/>
-									</div>
-
-									<div className={styles.droneAction}>
-										<ArrowUp onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `drop`,
-													args: ['up']
-												}
-											})
-										}/>
-
-										<div onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `drop`,
-													args: ['forward']
-												}
-											})
-										}>Drop</div>
-
-										<ArrowDown onClick={() => 
-											wsInstance.send({
-												type: "action",
-												data: {
-													fleet: queryFleet,
-													drone: queryDrone,
-													query: `drop`,
-													args: ['down']
-												}
-											})
-										}/>
-									</div>
-
+									 
 									<div>
 										<p>{drone?.fuel} / {drone?.max_fuel}</p>
 									</div>
@@ -245,7 +139,21 @@ export default function Home() {
 										{
 											drone?.inventory?.map((e: Slot, i: number) => {
 												return (
-													<div key={`${queryDrone}.INV.${i}`} className={(i+1) == drone.selected_slot ? styles.selectedSlot : styles.inactiveItem}>
+													<div 
+														key={`${queryDrone}.INV.${i}`} 
+														className={(i+1) == drone.selected_slot ? styles.selectedSlot : styles.inactiveItem}
+														onClick={() => {
+															wsInstance.send({
+																type: "action",
+																data: {
+																	fleet: queryFleet,
+																	drone: queryDrone,
+																	query: `select`,
+																	args: [i+1]
+																}
+															})
+														}}
+													>
 														{ e.count }
 													</div>
 												)
@@ -253,33 +161,7 @@ export default function Home() {
 										}
 									</div>
 
-									<div className={styles.takeControl} onClick={() => {
-										wsInstance.send({
-											type: "action",
-											data: {
-												fleet: queryFleet,
-												drone: queryDrone,
-												query: `mineTunnel`,
-												args: ['8', '17', '17']
-											}
-										})
-									}}> 
-										MineTunnel
-									</div> 
-
-									<div className={styles.takeControl} onClick={() => {
-										wsInstance.send({
-											type: "action",
-											data: {
-												fleet: queryFleet,
-												drone: queryDrone,
-												query: `refuel`,
-												args: ['']
-											}
-										})
-									}}> 
-										Refuel
-									</div> 
+									
 
 									{/* <div>
 										<input type="text" ref={input_ref} />

@@ -5,8 +5,8 @@ import WebSocket from "ws";
 import { DroneFleet } from "./drone_fleet";
 
 // export enum BlockDirection { FORWARD, UP, DOWN }
-// export enum Direction { NORTH, EAST, SOUTH, WEST }
-// export enum Side { LEFT, RIGHT }
+export enum Direction { NORTH, EAST, SOUTH, WEST }
+export enum Side { LEFT, RIGHT }
 
 type MovementDirection = "forward" | "back" | "up" | "down";
 type TurnDirection = "left" | "right";
@@ -39,6 +39,11 @@ export class Drone extends EventEmitter {
 
     fuel: number;
     max_fuel: number;
+
+    x: number = 0;
+    y: number = 0;
+    z: number = 0;
+    d: Direction = 0;
 
     online: boolean;
 
@@ -115,6 +120,11 @@ export class Drone extends EventEmitter {
 
 			fuel: this.fuel,
 			max_fuel: this.max_fuel,
+
+            x: this.x,
+			y: this.y,
+			z: this.z,
+			d: this.d,
 
             online: this.online
         }
@@ -204,6 +214,14 @@ export class Drone extends EventEmitter {
 
 		return r;
 	}
+
+    async select(slot: number) {
+        let r = await this.execute<boolean>(`turtle.select(${slot % 16})`);
+		this.selected_slot = await this.execute<number>('turtle.getSelectedSlot()');
+		await this.updateInventory();
+
+		return r;
+    }
 
     async refresh() {
 		await this.updateInventory();
