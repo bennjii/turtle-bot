@@ -134,7 +134,7 @@ export default function Home() {
 									</div>
 								</div>
 
-								<div>
+								<div className={styles.botWorld}>
 									<div className={styles.inventory}>
 										{
 											drone?.inventory?.map((e: Slot, i: number) => {
@@ -160,8 +160,6 @@ export default function Home() {
 											})
 										}
 									</div>
-
-									
 
 									{/* <div>
 										<input type="text" ref={input_ref} />

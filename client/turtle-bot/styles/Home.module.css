@@ -190,18 +190,30 @@
   text-overflow: ellipsis;
 }
 
+/* .botWorld {
+  
+} */
+
 .inventory {
   display: grid;
   grid-template-columns: auto auto auto auto;
   padding: 1rem;
 
   width: fit-content;
-  background-color: #303744;
+  background-color: #1f212d;
   border-radius: 3px;
+}
+
+.selectedSlot, .inactiveItem {
+  user-select: none;
 }
 
 .selectedSlot {
   background-color: #33b3d9 !important;
+}
+
+.inactiveItem {
+  cursor: pointer;
 }
 
 .inventory > div {

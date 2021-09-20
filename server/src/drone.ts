@@ -216,7 +216,9 @@ export class Drone extends EventEmitter {
 	}
 
     async select(slot: number) {
-        let r = await this.execute<boolean>(`turtle.select(${slot % 16})`);
+        if(slot < 0 || slot > 16) return false;
+
+        let r = await this.execute<boolean>(`turtle.select(${slot})`);
 		this.selected_slot = await this.execute<number>('turtle.getSelectedSlot()');
 		await this.updateInventory();
 
