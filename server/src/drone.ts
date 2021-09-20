@@ -47,14 +47,14 @@ export class Drone extends EventEmitter {
         this.parent = parent;
 
         this.ws = ws;
+        this.online = true;
+
         this.fuel = json.fuel;
         this.max_fuel = json.max_fuel;
         this.drone_id = json.drone_id;
         this.inventory = json.inventory;
         this.drone_name = json.drone_name;
         this.selected_slot = json.selected_slot;
-
-        this.online = true;
 
         (async () => {
             await this.updateInventory();
@@ -119,10 +119,13 @@ export class Drone extends EventEmitter {
 
 			fuel: this.fuel,
 			max_fuel: this.max_fuel,
+
+            online: this.online
         }
     }
 
     async spinUp(ws: WebSocket) {
+        console.log(`[OPEN] Opening connection to ${this.drone_id}`)
         this.online = true;
         this.ws = ws;
 
@@ -130,6 +133,7 @@ export class Drone extends EventEmitter {
     }
 
     async spinDown() {
+        console.log(`[CLOSE] Closing connection to ${this.drone_id}`)
         this.online = false;
         this.ws.close();
 

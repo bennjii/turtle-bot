@@ -107,7 +107,7 @@
 
 .droneTable > div {
   display: grid;
-  grid-template-columns: 1fr 10% 10% 10% 15%;
+  grid-template-columns: 1fr 10% 10% 10% 10% 10%;
   gap: 1rem;
   align-items: center;
 

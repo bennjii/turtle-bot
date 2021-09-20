@@ -84,6 +84,7 @@ export default function Home() {
 							<div className={styles.droneTable}>
 								<div className={styles.tableHeader}>
 									<p>Name</p>
+									<p>Status</p>
 									<p>Type</p>
 									<p>Identifier</p>
 									<p>Fuel level</p>
