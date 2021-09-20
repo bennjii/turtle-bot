@@ -57,14 +57,10 @@ export class Drone extends EventEmitter {
         this.selected_slot = json.selected_slot;
 
         (async () => {
-            await this.updateInventory();
-
-            ws.send(JSON.stringify({
-                type: "setup",
-                data: this.toJSON()
-            }));
+            this.performLocalChanges();
 
             this.emit('init');
+            this.emit('update');
         })();
 
         this.ws?.on('message', (data: string) => {
@@ -122,6 +118,22 @@ export class Drone extends EventEmitter {
 
             online: this.online
         }
+    }
+
+    async performLocalChanges() {
+        await this.updateInventory();
+
+        this.ws.send(JSON.stringify({
+            type: "setup",
+            data: this.toJSON()
+        }));
+    }
+
+    async rename(name: string) {
+        this.drone_name = name;
+
+        await this.performLocalChanges();
+        this.emit('update');
     }
 
     async spinUp(ws: WebSocket) {

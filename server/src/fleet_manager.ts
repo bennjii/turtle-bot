@@ -45,6 +45,21 @@ export class FleetManager {
         return this.fleets.find(fleet => fleet.fleet_name == fleet_name)
     }
 
+    searchForDrone(drone_id: string) {
+        const fleet = this.fleets.forEach(e => {
+            const drones = e.drones.filter(e => {
+                e.drone_id = drone_id;
+            });
+
+            console.log(drones);
+            return drones;
+        });
+
+        console.log(fleet)
+
+        return fleet;
+    }
+
     toJSON() {
         return this;
     }

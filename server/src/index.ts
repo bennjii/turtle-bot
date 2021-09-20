@@ -96,10 +96,17 @@ fleet.on('connection', async function connection(ws) {
             const droneData = parsed.data;
             const fleetExists = fleetManager.getFleetByName(droneData.fleet_name);
             const droneExits = fleetExists?.getDrone(droneData.drone_id);
-
+            
             if(droneExits) {
                 droneExits.spinUp(ws);
             }else {
+                const droneInManager = fleetManager.searchForDrone(droneData.drone_id);
+                console.log(droneInManager);
+
+                // if(droneInManager) {
+                //     droneInManager.spinUp(ws);
+                // }
+
                 if(fleetExists) {
                     fleetExists.addDrone(droneData, ws);
                 } else {

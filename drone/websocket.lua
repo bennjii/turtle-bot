@@ -15,19 +15,19 @@ Drone = {
     selected_slot=turtle.getSelectedSlot()
 }
 
-print("[CONNECTING] ... ")
+-- print("Name your drone: ")
+-- Drone.drone_name = read();
+
+-- print("Enter new or existing fleet name: ")
+-- Drone.fleet_name = read()
+
+print("[BINDING] ... ")
 print(">> TurtulOS")
 local ws, err = http.websocket("ws://128.199.234.165:5757/");
 
 if err then
     print(err)
 elseif ws then
-    print("Name your drone: ")
-    Drone.drone_name = read();
-
-    print("Enter new or existing fleet name: ")
-    Drone.fleet_name = read()
-
     ws.send(json.encode({
         type="setup",
         data=Drone
