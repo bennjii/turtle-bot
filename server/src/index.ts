@@ -1,9 +1,20 @@
-import { Server } from 'ws';
+import WebSocket, { Server } from 'ws';
 import { Server as SocketIO } from "socket.io";
 // import { connect } from 'ngrok';
 import { FleetManager } from './fleet_manager'
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
+import { randomBytes } from 'crypto';
+
+const nonces = new Set();
+function getNonce(): string {
+	let nonce = '';
+	while (nonce === '' || nonces.has(nonce)) {
+		nonce = randomBytes(4).toString('hex');
+	}
+	nonces.add(nonce);
+	return nonce;
+}
 
 const fleet = new Server({ port: 5757 });
 const web = new SocketIO(5758, {
@@ -89,7 +100,7 @@ const fleetManager = new FleetManager(fleet, web);
 fleet.on('connection', async function connection(ws) {
     console.log(`[CONNECTION] Drone`)
 
-    ws.on('message', (data: string) => {
+    ws.on('message', async (data: string) => {
         const parsed: DroneSetup = JSON.parse(data);
 
         if(parsed.type == "setup") {
@@ -103,19 +114,64 @@ fleet.on('connection', async function connection(ws) {
                 const droneInManager = fleetManager.searchForDrone(droneData.drone_id);
                 console.log(droneInManager);
 
-                // if(droneInManager) {
-                //     droneInManager.spinUp(ws);
-                // }
+                if(droneInManager) {
+                    console.log(`Drone exists, but dosent know it (possibly mc server restart) (${droneInManager.drone_id})`)
+                    droneInManager.spinUp(ws);
+                }else {
+                    console.log(`Performing first time setup on ${droneData.drone_id}`);
 
-                if(fleetExists) {
-                    fleetExists.addDrone(droneData, ws);
-                } else {
-                    const fleetId = uuidv4();
+                    const fleet_name: string = await queryDrone(ws, 'Enter New or Existing Fleet Name')
+                    const fleetExists = fleetManager.getFleetByName(fleet_name);
+
+                    if(fleetExists) {
+                        fleetExists.addDrone(droneData, ws);
+                    }else {
+                        const drone_name: string = await queryDrone(ws, 'Enter Drone Name')
+                        const fleetId = uuidv4();
     
-                    fleetManager.newDroneFleet(fleetId, droneData.fleet_name);
-                    fleetManager.getFleet(fleetId)?.addDrone(droneData, ws)
+                        fleetManager.newDroneFleet(fleetId, fleet_name);
+                        fleetManager.getFleet(fleetId)?.addDrone({
+                            ...droneData,
+                            drone_name
+                        }, ws);
+                    }
                 }
+
+                // if(fleetExists) {
+                //     fleetExists.addDrone(droneData, ws);
+                // } else {
+                //     const fleetId = uuidv4();
+    
+                //     fleetManager.newDroneFleet(fleetId, droneData.fleet_name);
+                //     fleetManager.getFleet(fleetId)?.addDrone(droneData, ws)
+                // }
             }
         }
     })
 });
+
+const queryDrone = async (ws: WebSocket, query: string): Promise<string> => {
+    return new Promise(r => {
+        const nonce = getNonce();
+
+        ws.send(JSON.stringify({
+            type: "query",
+            data: {
+                query: query
+            },
+            nonce
+        }));
+
+        const listener = (_res: string) => {
+            try {
+                let res = JSON.parse(_res);
+                if(res?.nonce == nonce) {
+                    r(res.data);
+                    ws.off('message', listener)
+                }
+            } catch(e) {}
+        };
+
+        ws.on('message', listener);
+    });
+}

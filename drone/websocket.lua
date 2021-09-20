@@ -51,6 +51,12 @@ elseif ws then
             print(">> TurtleOS Bound & Operational")
         end
 
+        if obj.type == "query" then
+            term.clear()
+            print("[QUESTION] "..obj.data.query..)
+            print(">> TurtleOS Bound & Operational")
+        end
+
         if obj.type == "eval" then
             local func = loadstring(obj['function'])
 
