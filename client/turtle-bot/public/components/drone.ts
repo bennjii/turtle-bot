@@ -38,6 +38,8 @@ export class Drone extends EventEmitter {
     fuel: number;
     max_fuel: number;
 
+    online: boolean;
+
     constructor(json: any, ws: WebSocket) {
         super();
 
@@ -48,6 +50,7 @@ export class Drone extends EventEmitter {
         this.inventory = json.inventory;
         this.drone_name = json.drone_name;
         this.selected_slot = json.selected_slot;
+        this.online = json.online;
     }
 
     execute<T>(string: string): Promise<T> {

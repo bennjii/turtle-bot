@@ -25,11 +25,6 @@ export class DroneFleet extends EventEmitter {
 
         drone.on('update', () => {
             this.emit('update', drone.drone_id);
-
-            // this.web.sockets.in(drone.drone_id).emit('message', {
-            //     type: "update",
-            //     data: drone
-            // });
         });
 
         return this.drones.push(drone)

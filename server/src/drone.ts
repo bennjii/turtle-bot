@@ -40,6 +40,8 @@ export class Drone extends EventEmitter {
     fuel: number;
     max_fuel: number;
 
+    online: boolean;
+
     constructor(json: any, ws: WebSocket, parent: DroneFleet) {
         super();
         this.parent = parent;
@@ -51,6 +53,8 @@ export class Drone extends EventEmitter {
         this.inventory = json.inventory;
         this.drone_name = json.drone_name;
         this.selected_slot = json.selected_slot;
+
+        this.online = true;
 
         (async () => {
             await this.updateInventory();
@@ -67,9 +71,17 @@ export class Drone extends EventEmitter {
             const parsed: DroneUpdate = JSON.parse(data);
 
             if(parsed.type == "delete") {
-                parent.removeDrone(parsed.data.drone_id);
+                this.cull();
             }
         });
+
+        this.ws.on('close', () => {
+            this.spinDown();
+        });
+
+        this.ws.on('error', () => {
+            this.spinDown();
+        })
     }
 
     execute<T>(string: string): Promise<T> {
@@ -108,6 +120,25 @@ export class Drone extends EventEmitter {
 			fuel: this.fuel,
 			max_fuel: this.max_fuel,
         }
+    }
+
+    async spinUp(ws: WebSocket) {
+        this.online = true;
+        this.ws = ws;
+
+        this.emit('update')
+    }
+
+    async spinDown() {
+        this.online = false;
+        this.ws.close();
+
+        this.emit('update')
+    }
+
+    async cull() {
+        await this.spinDown();
+        this.parent.removeDrone(this.drone_id);
     }
 
     async move(direction: MovementDirection) {

@@ -94,15 +94,20 @@ fleet.on('connection', async function connection(ws) {
 
         if(parsed.type == "setup") {
             const droneData = parsed.data;
-            const fleetExists = fleetManager.getFleetByName(droneData.fleet_name)
+            const fleetExists = fleetManager.getFleetByName(droneData.fleet_name);
+            const droneExits = fleetExists?.getDrone(droneData.drone_id);
 
-            if(fleetExists) {
-                fleetExists.addDrone(droneData, ws);
-            } else {
-                const fleetId = uuidv4();
-
-                fleetManager.newDroneFleet(fleetId, droneData.fleet_name);
-                fleetManager.getFleet(fleetId)?.addDrone(droneData, ws)
+            if(droneExits) {
+                droneExits.spinUp(ws);
+            }else {
+                if(fleetExists) {
+                    fleetExists.addDrone(droneData, ws);
+                } else {
+                    const fleetId = uuidv4();
+    
+                    fleetManager.newDroneFleet(fleetId, droneData.fleet_name);
+                    fleetManager.getFleet(fleetId)?.addDrone(droneData, ws)
+                }
             }
         }
     })

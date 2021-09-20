@@ -17,6 +17,13 @@ const Drone: React.FC<{ drone_id: string }> = ({ drone_id }) => {
     return (
         <div className={styles.droneListElement}>
             <h3>{ data.drone_name }</h3>
+
+            <div className={data.online  ? styles.statusPositive : styles.statusNeutral}>
+                {
+                    data.online ? "Online" : "Offline"
+                }
+            </div>
+
             <div className={data.max_fuel >= 99999 ? styles.statusPositive : styles.statusNeutral}>
                 {
                     data.max_fuel < 100000 ? "Normal" : "Advanced"
