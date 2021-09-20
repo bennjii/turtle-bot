@@ -40,7 +40,11 @@ export default function Home() {
 				default:
 					break;
 			}
-		})
+		});
+
+		return () => {
+			wsInstance.close()
+		}
 	}, [wsInstance])
 
 	return (

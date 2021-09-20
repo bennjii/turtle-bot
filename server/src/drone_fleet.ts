@@ -1,4 +1,4 @@
-// import { Server as SocketIO } from 'socket.io';
+import { Server as SocketIO } from 'socket.io';
 import EventEmitter from 'events';
 import WebSocket from 'ws';
 import { Drone } from './drone'
@@ -7,13 +7,13 @@ export class DroneFleet extends EventEmitter {
     fleet_id: string;
     fleet_name: string;
     drones: Drone[] = [];
-    // web: SocketIO;
+    web: SocketIO;
 
-    constructor(fleet_id: string, fleet_name: string) { //, web: SocketIO
+    constructor(fleet_id: string, fleet_name: string, web: SocketIO) {
         super();
         this.fleet_id = fleet_id;
         this.fleet_name = fleet_name;
-        // this.web = web;
+        this.web = web;
     }
 
     addDrone(droneData: Partial<Drone>, ws: WebSocket) {

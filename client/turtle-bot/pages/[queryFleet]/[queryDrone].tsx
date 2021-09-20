@@ -23,6 +23,8 @@ export default function Home() {
 	useEffect(() => {
 		if(!process.browser) return;
 
+		if(!queryFleet || !queryDrone) return;
+
 		wsInstance.send({
 			type: "request",
 			data: {
@@ -45,6 +47,10 @@ export default function Home() {
 					break;
 			}
 		})
+
+		return () => {
+			wsInstance.close()
+		}
 	}, [wsInstance, queryFleet, queryDrone])
 
 	const input_ref = useRef<HTMLInputElement>(null);
@@ -254,11 +260,25 @@ export default function Home() {
 												fleet: queryFleet,
 												drone: queryDrone,
 												query: `mineTunnel`,
-												args: ['3', '3', '3']
+												args: ['8', '17', '17']
 											}
 										})
 									}}> 
 										MineTunnel
+									</div> 
+
+									<div className={styles.takeControl} onClick={() => {
+										wsInstance.send({
+											type: "action",
+											data: {
+												fleet: queryFleet,
+												drone: queryDrone,
+												query: `refuel`,
+												args: ['']
+											}
+										})
+									}}> 
+										Refuel
 									</div> 
 
 									{/* <div>

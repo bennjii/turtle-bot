@@ -22,6 +22,10 @@ export default function Home() {
 	useEffect(() => {
 		if(!process.browser) return;
 
+		console.log(wsInstance);
+
+		if(!queryFleet) return;
+
 		wsInstance.send({
 			type: "request",
 			data: {
@@ -45,6 +49,10 @@ export default function Home() {
 					break;
 			}
 		})
+
+		return () => {
+			wsInstance.close()
+		}
 	}, [wsInstance, queryFleet])
 
 	return (

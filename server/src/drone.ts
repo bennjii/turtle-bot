@@ -196,15 +196,24 @@ export class Drone extends EventEmitter {
     }
 
     async mineTunnel(height: number, width: number, depth: number) {
-        for(let i = 0; i < depth; i++) {
-            const half_width = (width-1) / 2;
+        const half_width = (width-1) / 2;
+        const operation_cost = depth * (
+            height
+            + ((Math.floor(half_width) * 2) * height)
+            + ((Math.ceil(half_width) * 2) * height)
+        );
 
+        if(operation_cost < this.fuel) return false;
+
+        for(let i = 0; i < depth; i++) {
             await this.digHeight(height);
             await this.move('forward');
 
             await this.digHalfRow('left', Math.floor(half_width), height);
             await this.digHalfRow('right', Math.ceil(half_width), height);
         }
+
+        return true;
     }
 
     private parseDirection(prefix: string, direction: BlockDirection | TurnDirection): string {
