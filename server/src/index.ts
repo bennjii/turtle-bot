@@ -121,12 +121,15 @@ fleet.on('connection', async function connection(ws) {
                     console.log(`Performing first time setup on ${droneData.drone_id}`);
 
                     const fleet_name: string = await queryDrone(ws, 'Enter New or Existing Fleet Name')
+                    const drone_name: string = await queryDrone(ws, 'Enter Drone Name')
                     const fleetExists = fleetManager.getFleetByName(fleet_name);
 
                     if(fleetExists) {
-                        fleetExists.addDrone(droneData, ws);
+                        fleetExists.addDrone({
+                            ...droneData,
+                            drone_name
+                        }, ws);
                     }else {
-                        const drone_name: string = await queryDrone(ws, 'Enter Drone Name')
                         const fleetId = uuidv4();
     
                         fleetManager.newDroneFleet(fleetId, fleet_name);
@@ -136,15 +139,6 @@ fleet.on('connection', async function connection(ws) {
                         }, ws);
                     }
                 }
-
-                // if(fleetExists) {
-                //     fleetExists.addDrone(droneData, ws);
-                // } else {
-                //     const fleetId = uuidv4();
-    
-                //     fleetManager.newDroneFleet(fleetId, droneData.fleet_name);
-                //     fleetManager.getFleet(fleetId)?.addDrone(droneData, ws)
-                // }
             }
         }
     })

@@ -46,14 +46,18 @@ elseif ws then
         
         if obj.type == "setup" then
             term.clear()
+            term.setCursorPos(1,1);
+
             Drone = obj.data
-            print("[BOUND] "..Drone.drone_id.." ("..Drone.drone_name..")")
+            print("[B] "..Drone.drone_id.." ("..Drone.drone_name..")")
             print(">> TurtleOS Bound & Operational")
         end
 
         if obj.type == "query" then
             term.clear()
-            print("[QUESTION] "..obj.data.query)
+            term.setCursorPos(1,1);
+
+            print("[Q] "..obj.data.query)
             local result = read()
             ws.send(json.encode({type="res",data=result, nonce=obj.nonce}))
         end
