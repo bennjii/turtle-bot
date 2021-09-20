@@ -87,7 +87,7 @@ const fleetManager = new FleetManager(fleet, web);
 
             if(req.type == "action") {
                 const drone = fleetManager.getFleetByName(req.data.fleet)?.getDrone(req.data.drone);
-                console.log(`${req.data.query}(${[...req.data.args]})  on ${req.data.fleet} - ${req.data.drone}`)
+                // console.log(`${req.data.query}(${[...req.data.args]})  on ${req.data.fleet} - ${req.data.drone}`)
                 
                 //@ts-expect-error
                 drone[req.data.query](...req.data.args);
@@ -112,13 +112,12 @@ fleet.on('connection', async function connection(ws) {
                 droneExits.spinUp(ws);
             }else {
                 const droneInManager = fleetManager.searchForDrone(droneData.drone_id);
-                console.log(droneInManager);
 
                 if(droneInManager) {
-                    console.log(`Drone exists, but dosent know it (possibly mc server restart) (${droneInManager.drone_id})`)
+                    // console.log(`Drone exists, but dosent know it (possibly mc server restart) (${droneInManager.drone_id})`)
                     droneInManager.spinUp(ws);
                 }else {
-                    console.log(`Performing first time setup on ${droneData.drone_id}`);
+                    // console.log(`Performing first time setup on ${droneData.drone_id}`);
 
                     const fleet_name: string = await queryDrone(ws, 'Enter New or Existing Fleet Name')
                     const drone_name: string = await queryDrone(ws, 'Enter Drone Name')
