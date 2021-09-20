@@ -309,7 +309,13 @@ export class Drone extends EventEmitter {
     }
 
     async updateInventory() {
-        this.inventory = await this.execute<Slot[]>('{' + new Array(16).fill(0).map((_, i) => `turtle.getItemDetail(${i + 1})`).join(', ') + '}');
+        this.inventory = await (await this.execute<Slot[]>('{' + new Array(16).fill(0).map((_, i) => `turtle.getItemDetail(${i + 1})`).join(', ') + '}')).map(e => {
+            return e ? e : {
+                count: 0,
+                name: '',
+                damage: 0
+            }
+        });
         
         while (this.inventory.length < 16) {
             this.inventory.push({

@@ -138,7 +138,7 @@ export default function Home() {
 									<div className={styles.inventory}>
 										{
 											drone?.inventory?.map((e: Slot, i: number) => {
-												return (
+												return e ? (
 													<div 
 														key={`${queryDrone}.INV.${i}`} 
 														className={(i+1) == drone.selected_slot ? styles.selectedSlot : styles.inactiveItem}
@@ -156,7 +156,7 @@ export default function Home() {
 													>
 														{ e.count }
 													</div>
-												)
+												) : <div className={(i+1) == drone.selected_slot ? styles.selectedSlot : styles.inactiveItem}></div>
 											})
 										}
 									</div>
