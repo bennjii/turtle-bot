@@ -137,11 +137,11 @@ export class Drone extends EventEmitter {
     }
 
     async spinUp(ws: WebSocket) {
-        await this.performLocalChanges();
-
-        console.log(`[OPEN] Opening connection to ${this.drone_id}`)
         this.online = true;
         this.ws = ws;
+
+        await this.performLocalChanges();
+        console.log(`[OPEN] Opening connection to ${this.drone_id}`)
 
         this.emit('update')
     }

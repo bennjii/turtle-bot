@@ -53,8 +53,9 @@ elseif ws then
 
         if obj.type == "query" then
             term.clear()
-            print("[QUESTION] "..obj.data.query..)
-            print(">> TurtleOS Bound & Operational")
+            print("[QUESTION] "..obj.data.query)
+            local result = read()
+            ws.send(json.encode({type="res",data=result, nonce=obj.nonce}))
         end
 
         if obj.type == "eval" then
