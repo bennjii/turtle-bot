@@ -11,6 +11,7 @@ import { DroneContext, FleetContext } from '@components/context';
 import { useRouter } from 'next/router';
 import { ArrowDown, ArrowRight, ArrowUp } from 'react-feather';
 import ActionMenu from '@components/action_menu';
+import World from '@components/world';
 
 export const isBrowser = typeof window !== "undefined";
 
@@ -18,8 +19,14 @@ export default function Home() {
     const router = useRouter()
     const { queryFleet, queryDrone } = router.query
 
+	const [ fleet, setFleet ] = useState(null);
 	const [ drone, setDrone ] = useState<DroneType>(null);
+
 	const wsInstance = useMemo(() => isBrowser ? io(ip.url) : null, []);
+
+	useEffect(() => {
+		console.log(drone);
+	}, [drone])
 
 	useEffect(() => {
 		if(!process.browser) return;
@@ -34,15 +41,24 @@ export default function Home() {
 			}
 		})
 
+		wsInstance.send({
+			type: "request",
+			data: {
+				fleet: queryFleet,
+			}
+		})
+
 		wsInstance.on('message', (data: any) => {
 			console.log(data);
 			
 			switch(data.type) {
 				case "response":
-					setDrone(data.data)
+					if(data.data.drones) setFleet(data.data)
+					else setDrone(data.data)
 					break;
 				case "update":
-					setDrone(data.data)
+					if(data.data.drones) setFleet(data.data)
+					else setDrone(data.data)
 					break;
 				default:
 					break;
@@ -55,10 +71,77 @@ export default function Home() {
 	}, [wsInstance, queryFleet, queryDrone])
 
 	const input_ref = useRef<HTMLInputElement>(null);
+	const event_input = useRef(null);
+
+	useEffect(() => {
+		if(event_input.current) event_input.current.focus()
+	}, [event_input])
 
 	return (
-		<DroneContext.Provider value={{ wsInstance, drone: drone, fleet_id: queryFleet?.toString() }}>
+		<DroneContext.Provider value={{ wsInstance, drone: drone, fleet: fleet }}>
 			<div className={styles.container}>
+				<input 
+					type="text" 
+					autoFocus 
+					ref={event_input} 
+					onBlur={() => { 
+						event_input.current.focus() 
+					}} 
+					onKeyDown={(e) => {
+						console.log(e.key);
+						
+						switch(e.key) {
+							case "w":
+								wsInstance.send({
+									type: "action",
+									data: {
+										fleet: queryFleet,
+										drone: queryDrone,
+										query: `move`,
+										args: ['forward']
+									}
+								})
+								break;
+							case "s":
+								wsInstance.send({
+									type: "action",
+									data: {
+										fleet: queryFleet,
+										drone: queryDrone,
+										query: `move`,
+										args: ['back']
+									}
+								})
+								break;
+							case " ":
+								wsInstance.send({
+									type: "action",
+									data: {
+										fleet: queryFleet,
+										drone: queryDrone,
+										query: `move`,
+										args: ['up']
+									}
+								})
+								break;
+							case "Control":
+								wsInstance.send({
+									type: "action",
+									data: {
+										fleet: queryFleet,
+										drone: queryDrone,
+										query: `move`,
+										args: ['down']
+									}
+								})
+								break;
+							default:
+								break;
+						}
+					}}
+					className={styles.begone}
+					/>
+
 				<div className={styles.header}>
 					<div>
 						<h1>Fleet Manager</h1>
@@ -78,13 +161,16 @@ export default function Home() {
 					<div className={styles.content}>
 						<div className={styles.droneList}>
 							<div>
-								<h2>{ drone?.drone_name }</h2>
-								<div className={drone?.online  ? styles.statusPositive : styles.statusNeutral}>
-									{
-										drone?.online ? "Online" : "Offline"
-									}
+								<div className={styles.droneHeader}>
+									<h2>{ drone?.drone_name }  <p>(#{ drone?.drone_id })</p></h2>
+									<div className={drone?.online  ? styles.statusPositive : styles.statusNeutral}>
+										{
+											drone?.online ? "Online" : "Offline"
+										}
+									</div>
 								</div>
-								<p>Manage drone, { drone?.drone_name } (#{ drone?.drone_id })</p>
+								
+								{/* <p>Manage drone, { drone?.drone_name } (#{ drone?.drone_id })</p> */}
 							</div>
 
 							<div className={styles.droneContent}>
@@ -107,7 +193,7 @@ export default function Home() {
 													fleet: queryFleet,
 													drone: queryDrone,
 													query: `mineTunnel`,
-													args: ['8', '17', '17']
+													args: ['3', '5', '17']
 												}
 											})
 										}}> 
@@ -135,6 +221,14 @@ export default function Home() {
 								</div>
 
 								<div className={styles.botWorld}>
+									{
+										drone ? 
+										<World />
+										:
+										<></>
+									}
+									
+
 									<div className={styles.inventory}>
 										{
 											drone?.inventory?.map((e: Slot, i: number) => {

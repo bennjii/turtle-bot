@@ -4,7 +4,7 @@ import EventEmitter from "events";
 import { DroneUpdate } from "./@types/drone_types";
 
 // export enum BlockDirection { FORWARD, UP, DOWN }
-// export enum Direction { NORTH, EAST, SOUTH, WEST }
+export enum Direction { NORTH, EAST, SOUTH, WEST }
 // export enum Side { LEFT, RIGHT }
 
 type MovementDirection = "forward" | "back" | "up" | "down";
@@ -31,6 +31,11 @@ export class Drone extends EventEmitter {
     drone_name: string;
 
     ws: WebSocket;
+
+    x: number;
+    y: number;
+    z: number;
+    d: Direction;
 
     inventory: Slot[];
     selected_slot: number;
