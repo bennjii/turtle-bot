@@ -23,6 +23,11 @@ export class FleetManager {
                 data: fleet
             });
 
+            this.web.sockets.in("*").emit('message', {
+                type: "update",
+                data: fleet
+            });
+
             this.web.sockets.in(drone_id).emit('message', {
                 type: "update",
                 data: fleet.getDrone(drone_id)

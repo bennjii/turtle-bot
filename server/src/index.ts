@@ -67,6 +67,8 @@ const fleetManager = new FleetManager(fleet, web);
                             type: "response",
                             data: fleetManager.fleets
                         });
+
+                        ws.join('*');
                     }else {
                         const req_fleet = fleetManager.getFleetByName(req.data.fleet);
 

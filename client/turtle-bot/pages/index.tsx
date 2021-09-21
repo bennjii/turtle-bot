@@ -35,7 +35,10 @@ export default function Home() {
 					setFleets(data.data)
 					break;
 				case "update":
-					setFleets(data.data)
+					setFleets([
+						...fleets.filter(e => e.fleet_id !== data.data.fleet_id),
+						data.data
+					]);
 					break;
 				default:
 					break;
@@ -45,6 +48,8 @@ export default function Home() {
 		return () => {
 			wsInstance.close()
 		}
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [wsInstance])
 
 	return (
