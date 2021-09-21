@@ -171,7 +171,10 @@ export class Drone extends EventEmitter {
 
     async move(direction: MovementDirection) {
         let r = await this.execute<boolean>(`turtle.${direction}()`);
-        if(r) this.fuel--; await this.updatePosition(direction);
+        if(r) {
+            this.fuel--; 
+            await this.updatePosition(direction);
+        }
 
         return r
     }

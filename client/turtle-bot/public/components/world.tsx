@@ -39,13 +39,15 @@ const World: React.FC<{ }> = ({ }) => {
             {/* <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} /> */}
             {/* <pointLight position={[-10, -10, -10]} /> */}
 
-            {
+            {/* {
                 fleet?.drones?.map((d: Drone) => {                    
                     return ( 
                         <DroneBox drone={d} key={`WORLD.DRONE-${d.drone_id}`}/> 
                     )
                 })
-            }
+            } */}
+
+            <DroneBox drone={currentDrone} key={`WORLD.DRONE-${currentDrone.drone_id}`}/> 
         </Canvas>
     )
 }
