@@ -102,6 +102,17 @@ export default function Home() {
 									}
 								})
 								break;
+							case "a":
+								wsInstance.send({
+									type: "action",
+									data: {
+										fleet: queryFleet,
+										drone: queryDrone,
+										query: `turn`,
+										args: ['left']
+									}
+								})
+								break;
 							case "s":
 								wsInstance.send({
 									type: "action",
@@ -110,6 +121,17 @@ export default function Home() {
 										drone: queryDrone,
 										query: `move`,
 										args: ['back']
+									}
+								})
+								break;
+							case "d":
+								wsInstance.send({
+									type: "action",
+									data: {
+										fleet: queryFleet,
+										drone: queryDrone,
+										query: `turn`,
+										args: ['right']
 									}
 								})
 								break;

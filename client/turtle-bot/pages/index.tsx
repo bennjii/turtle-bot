@@ -35,8 +35,9 @@ export default function Home() {
 					setFleets(data.data)
 					break;
 				case "update":
+					const dupl = [ fleets?.filter(e => e.fleet_id !== data.data.fleet_id) ] ?? null;
 					setFleets([
-						...fleets.filter(e => e.fleet_id !== data.data.fleet_id),
+						...dupl,
 						data.data
 					]);
 					break;

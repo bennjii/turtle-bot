@@ -347,6 +347,13 @@
   align-items: center;
 }
 
+.droneHeader h2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
 .begone {
   height: 0px;
   width: 0px;

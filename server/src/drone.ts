@@ -303,21 +303,51 @@ export class Drone extends EventEmitter {
 		}
 	}
 
-    //@ts-ignore
     async updatePosition(direction: MovementDirection | TurnDirection) {
-        // Future planning for creating a mapping protocol.
-        if(direction == "forward") this.x++;
-        else if(direction == "back") this.x--;
-
-        else if(direction == "up") this.y++;
-        else if(direction == "down") this.y--;
+        let deltas = this.getDirectionDelta(this.d);
         
-        else if(direction == "right") this.z++;
-        else if(direction == "left") this.z--;
+        switch(direction) {
+            case "forward":
+                this.x += deltas[0];
+				this.z += deltas[1];
+                break;
+            case "back":
+                this.x -= deltas[0];
+				this.z -= deltas[1];
+                break;
+            case "up":
+                this.y++;
+                break;
+            case "down":
+                this.y--;
+                break;
+            case "left":
+                this.d += 3;
+                this.d %= 4;
+                break;
+            case "right":
+                this.d++;
+                this.d %= 4;
+                break;
+        }
 
+        await this.updateBlock();
         this.emit('update');
 
         return true;
+    }
+
+    getDirectionDelta(dir: Direction): [number, number] {
+        if (dir === Direction.NORTH) return [0, -1];
+		else if (dir === Direction.EAST) return [1, 0];
+		else if (dir === Direction.SOUTH) return [0, 1];
+		else if (dir === Direction.WEST) return [-1, 0];
+        
+		return [0, 0];
+    }
+
+    async updateBlock() {
+        return;
     }
 
     async updateInventory() {

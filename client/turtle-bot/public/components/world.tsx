@@ -6,7 +6,7 @@ import { DroneContext, FleetContext } from "./context";
 import router from "next/router";
 
 import { OrbitControls } from '@react-three/drei';
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import Block from "./block";
 import { EffectComposer, SMAA } from "@react-three/postprocessing";
 import DroneBox from "./world_drone";
@@ -14,7 +14,7 @@ import DroneBox from "./world_drone";
 const World: React.FC<{ }> = ({ }) => {
     const { wsInstance, drone, fleet } = useContext(DroneContext);
     const [ currentDrone, setCurrentDrone ] = useState(drone);
-
+    
     useEffect(() => {
         setCurrentDrone(drone);
     }, [drone])
@@ -31,9 +31,11 @@ const World: React.FC<{ }> = ({ }) => {
             //@ts-expect-error */}
             <OrbitControls 
                 target={[currentDrone.x, currentDrone.y, currentDrone.z]}
+                rotation={[0, -(currentDrone.d + 2) * Math.PI / 2, 0]}
                 enablePan={false} 
                 enableZoom={true} 
-                enableRotate={true} />
+                enableRotate={true} 
+                />
 
             <ambientLight intensity={1} />
             {/* <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} /> */}
@@ -47,7 +49,7 @@ const World: React.FC<{ }> = ({ }) => {
                 })
             } */}
 
-            <DroneBox drone={currentDrone} key={`WORLD.DRONE-${currentDrone.drone_id}`}/> 
+            <DroneBox drone={currentDrone} droneChange={setCurrentDrone} key={`WORLD.DRONE-${currentDrone.drone_id}`}/> 
         </Canvas>
     )
 }
