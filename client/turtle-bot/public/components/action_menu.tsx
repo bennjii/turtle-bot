@@ -6,7 +6,7 @@ import { DroneContext, FleetContext } from "./context";
 import router from "next/router";
 
 const ActionMenu: React.FC<{ name: string, action: string }> = ({ name, action }) => {
-    const { wsInstance, drone, fleet_id } = useContext(DroneContext);
+    const { wsInstance, drone, fleet} = useContext(DroneContext);
 
     return (
         <div className={styles.droneAction}>
@@ -14,9 +14,9 @@ const ActionMenu: React.FC<{ name: string, action: string }> = ({ name, action }
             wsInstance.send({
                 type: "action",
                 data: {
-                    fleet: fleet_id,
+                    fleet: fleet.fleet_name,
                     drone: drone.drone_id,
-                    query: `dig`,
+                    query: action,
                     args: ['up']
                 }
             })
@@ -26,9 +26,9 @@ const ActionMenu: React.FC<{ name: string, action: string }> = ({ name, action }
             wsInstance.send({
                 type: "action",
                 data: {
-                    fleet: fleet_id,
+                    fleet: fleet.fleet_name,
                     drone: drone.drone_id,
-                    query: `dig`,
+                    query: action,
                     args: ['forward']
                 }
             })
@@ -38,9 +38,9 @@ const ActionMenu: React.FC<{ name: string, action: string }> = ({ name, action }
             wsInstance.send({
                 type: "action",
                 data: {
-                    fleet: fleet_id,
+                    fleet: fleet.fleet_name,
                     drone: drone.drone_id,
-                    query: `dig`,
+                    query: action,
                     args: ['down']
                 }
             })

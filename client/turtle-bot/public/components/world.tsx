@@ -49,6 +49,8 @@ const World: React.FC<{ }> = ({ }) => {
                 })
             } */}
 
+            <Block></Block>
+
             <DroneBox drone={currentDrone} droneChange={setCurrentDrone} key={`WORLD.DRONE-${currentDrone.drone_id}`}/> 
         </Canvas>
     )

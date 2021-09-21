@@ -15,24 +15,23 @@ const DroneBox: React.FC<any> = ({ drone, droneChange }) => {
     const obj = useGLTF("/models/turtle.glb");
     const { camera } = useThree();
 
-    console.log(camera.position);
-
     return (
         <>
             <mesh
                 position={[drone?.x, drone?.y, drone?.z]}
+                rotation={[0, -(drone.d + 2) * Math.PI / 2, 0]}
                 ref={mesh}
+                visible={false}
                 onClick={(event) => droneChange(drone)}
                 >
-                    {/* 
-                    //@ts-expect-error */}
-                    <Billboard
+                    <boxBufferGeometry args={[1, 1, 1]} />
+                    {/* <Billboard
                         position={[drone?.x, drone?.y, drone?.z]}
                         follow={true} // Follow the camera (default=true)
                         lockX={false} // Lock the rotation on the x axis (default=false)
                         lockY={false} // Lock the rotation on the y axis (default=false)
                         lockZ={false} // Lock the rotation on the z axis (default=false)
-                        >
+                        > */}
                             {/* 
                             //@ts-expect-error */}
                             <Text 
@@ -42,16 +41,20 @@ const DroneBox: React.FC<any> = ({ drone, droneChange }) => {
                                 anchorY={"bottom"}
                                 fontSize={.5}
                                 >{drone.drone_name}</Text>
-                        </Billboard>
+                        {/* </Billboard> */}
  
-                    {
-                        obj ? 
-                        <primitive object={obj.scene} position={[drone?.x, drone?.y, drone?.z]}/>
-                        :
-                        null
-                    }
+                    
             </mesh>
-            
+            {
+                obj ? 
+                <primitive 
+                    object={obj.scene} 
+                    position={[drone?.x, drone?.y, drone?.z]}
+                    rotation={[0, -(drone.d + 2) * Math.PI / 2, 0]}
+                />
+                :
+                null
+            }
         </>
     )
 }
