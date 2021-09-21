@@ -1,10 +1,4 @@
-import { Drone as DroneType } from "./drone";
-import styles from "../../styles/Home.module.css"
-import { ArrowRight } from "react-feather";
 import { useContext, useEffect, useRef, useState } from "react";
-import { DroneContext, FleetContext } from "./context";
-import router from "next/router";
-import { Canvas, useFrame } from "@react-three/fiber";
 
 const Block: React.FC<any> = (args) => {
     // const { wsInstance, drone, fleet_id } = useContext(DroneContext);

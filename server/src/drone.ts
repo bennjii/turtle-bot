@@ -342,11 +342,16 @@ export class Drone extends EventEmitter {
 		else if (dir === Direction.EAST) return [1, 0];
 		else if (dir === Direction.SOUTH) return [0, 1];
 		else if (dir === Direction.WEST) return [-1, 0];
-        
+
 		return [0, 0];
     }
 
     async updateBlock() {
+        let deltas = this.getDirectionDelta(this.d);
+		let { forward, up, down } = await this.execute<{ forward: any, up: any, down: any }>('{down=select(2,turtle.inspectDown()), up=select(2,turtle.inspectUp()), forward=select(2,turtle.inspect())}');
+		this.parent.updateBlock(this.x, this.y - 1, this.z, down);
+		this.parent.updateBlock(this.x, this.y + 1, this.z, up);
+		this.parent.updateBlock(this.x + deltas[0], this.y, this.z + deltas[1], forward);
         return;
     }
 
