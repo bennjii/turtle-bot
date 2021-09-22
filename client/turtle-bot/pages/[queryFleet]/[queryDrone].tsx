@@ -209,7 +209,7 @@ export default function Home() {
 													fleet: queryFleet,
 													drone: queryDrone,
 													query: `mineTunnel`,
-													args: ['3', '5', '17']
+													args: ['2', '1', '25']
 												}
 											})
 										}}> 

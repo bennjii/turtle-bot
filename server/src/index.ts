@@ -5,7 +5,6 @@ import { FleetManager } from './fleet_manager'
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import { randomBytes } from 'crypto';
-import World from './world';
 
 const nonces = new Set();
 function getNonce(): string {
@@ -25,8 +24,6 @@ const web = new SocketIO(5758, {
     }
 });
 
-//@ts-expect-error
-const world = new World();
 const fleetManager = new FleetManager(fleet, web);
 
 (async () => {

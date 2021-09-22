@@ -189,12 +189,14 @@ export class Drone extends EventEmitter {
     async dig(direction: BlockDirection) {
 		let r = await this.execute<boolean>(`turtle.${this.parseDirection("dig", direction)}()`);
 		await this.updateInventory();
+        await this.updateBlock();
 		return r;
 	}
 
     async place(direction: BlockDirection) {
 		let r = await this.execute<boolean>(`turtle.${this.parseDirection("place", direction)}()`);
 		await this.updateInventory();
+        await this.updateBlock();
 		return r;
 	}
 
@@ -230,6 +232,7 @@ export class Drone extends EventEmitter {
 
     async refresh() {
 		await this.updateInventory();
+        await this.updateBlock();
 
 		this.selected_slot = await this.execute<number>('turtle.getSelectedSlot()');
 		this.max_fuel = await this.execute<number>('turtle.getFuelLimit()');
