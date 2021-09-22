@@ -19,6 +19,8 @@ const World: React.FC<{ }> = ({ }) => {
         setCurrentDrone(drone);
     }, [drone])
 
+    console.log("From", fleet?.drones);
+
     return (
         <Canvas>
             <Suspense fallback={null}>
@@ -41,17 +43,43 @@ const World: React.FC<{ }> = ({ }) => {
             {/* <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} /> */}
             {/* <pointLight position={[-10, -10, -10]} /> */}
 
-            {/* {
-                fleet?.drones?.map((d: Drone) => {                    
-                    return ( 
-                        <DroneBox drone={d} key={`WORLD.DRONE-${d.drone_id}`}/> 
-                    )
-                })
-            } */}
+            {
+                fleet?.drones ? 
+                    (fleet?.drones)?.map((__d: Drone, i: number) => {  
+                        // if(fleet.drones[i].drone_id == currentDrone.drone_id) return <></>;    
+                        console.log(" -> ", __d, fleet.drones[i]);
+                                    
+                        return ( 
+                            <DroneBox drone={__d}  droneChange={setCurrentDrone} key={`WORLD.DRONE${__d.drone_id}`}/> 
+                        )
+                    })
+                :
+                    <></>
+            }
 
-            <Block></Block>
+            {
+                fleet?.map?.data?.world ? 
+                    Object.keys(fleet?.map?.data?.world).map((position: any) => {
+                        let positions = position.split(',').map(p => parseInt(p)) as [number, number, number];
 
-            <DroneBox drone={currentDrone} droneChange={setCurrentDrone} key={`WORLD.DRONE-${currentDrone.drone_id}`}/> 
+                        return (
+                            <Block 
+                                key={position} 
+                                position={[positions[0], positions[1], positions[2]]}
+                                data={fleet?.map?.data?.world[position]}
+                                ></Block>
+                        )
+                    })
+                :
+                    <></>
+            }
+
+            <DroneBox 
+                drone={currentDrone} 
+                droneChange={setCurrentDrone} 
+                key={`WORLD.DRONE-${currentDrone.drone_id}`}
+                /> 
+
         </Canvas>
     )
 }

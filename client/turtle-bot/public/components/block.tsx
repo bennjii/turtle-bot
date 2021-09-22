@@ -9,9 +9,9 @@ import { Canvas, useFrame } from "@react-three/fiber";
 const Block: React.FC<any> = (args) => {
     // const { wsInstance, drone, fleet_id } = useContext(DroneContext);
     const mesh = useRef()
+    const { data } = args;
 
     const [hovered, setHover] = useState(false)
-    const [active, setActive] = useState(false)
 
     // useFrame((state, delta) => (mesh.current.rotation.x += 0.01))
     
@@ -19,13 +19,16 @@ const Block: React.FC<any> = (args) => {
         <mesh
             {...args}
             ref={mesh}
-            scale={active ? 1.5 : 1}
-            onClick={(event) => setActive(!active)}
             onPointerOver={(event) => setHover(true)}
             onPointerOut={(event) => setHover(false)}
         >
             <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+            <meshStandardMaterial 
+                color={data.name == "minecraft:stone" ? "grey" : "red"} 
+                transparent 
+                opacity={0.1} 
+                border={1}
+            />
         </mesh>
     )
 }

@@ -25,10 +25,6 @@ export default function Home() {
 	const wsInstance = useMemo(() => isBrowser ? io(ip.url) : null, []);
 
 	useEffect(() => {
-		console.log(drone);
-	}, [drone])
-
-	useEffect(() => {
 		if(!process.browser) return;
 
 		if(!queryFleet || !queryDrone) return;
@@ -49,8 +45,6 @@ export default function Home() {
 		})
 
 		wsInstance.on('message', (data: any) => {
-			console.log(data);
-			
 			switch(data.type) {
 				case "response":
 					if(data.data.drones) setFleet(data.data)

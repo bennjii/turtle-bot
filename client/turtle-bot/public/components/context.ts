@@ -1,3 +1,4 @@
+import { JsonDB } from "node-json-db";
 import { createContext } from "react";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "socket.io-client/build/typed-events";
@@ -6,7 +7,8 @@ import { Drone } from "./drone";
 interface Fleet {
     drones: Drone[],
     fleet_name: string,
-    fleet_id: string
+    fleet_id: string,
+    map: any
 }
 
 const FleetContext = createContext<{ wsInstance: Socket<DefaultEventsMap, DefaultEventsMap>, fleet: Fleet[] | Fleet }>(null);

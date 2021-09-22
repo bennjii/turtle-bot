@@ -8,13 +8,6 @@ const DroneBox: React.FC<any> = ({ drone, droneChange }) => {
     const mesh = useRef();
     const ref = useRef()
     
-    const { rotation } = useSpring({ 
-        rotation: -(drone.d + 2) * Math.PI / 2,
-        config: config.gentle
-    });
-
-    console.log(rotation)
-
     // //@ts-expect-error
     // useFrame(() => ref.current.position.x = drone ? THREE.MathUtils.lerp(ref?.current?.position.x, [drone.x, drone.y, drone.z], 0.1) : ref?.current?.position.x)
 
