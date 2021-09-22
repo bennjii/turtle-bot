@@ -18,8 +18,8 @@ export class FleetManager {
         const fleet = new DroneFleet(fleet_id, fleet_name);
 
         fleet.on('update', (drone_id) => {
-            console.log(this.web.sockets);
-            
+            console.log(this.web.sockets.sockets.size);
+
             this.web.sockets.in(fleet.fleet_id).emit('message', {
                 type: "update",
                 data: fleet

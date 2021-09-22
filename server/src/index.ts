@@ -95,7 +95,7 @@ const fleetManager = new FleetManager(fleet, web);
                 // console.log(`${req.data.query}(${[...req.data.args]})  on ${req.data.fleet} - ${req.data.drone}`)
                 
                 //@ts-expect-error
-                drone[req.data.query](...req.data.args);
+                drone?.[req.data.query](...req.data.args);
             }
         })
     });
