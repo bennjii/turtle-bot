@@ -26,8 +26,8 @@ const Block: React.FC<any> = (args) => {
             <meshStandardMaterial 
                 color={data.name == "minecraft:stone" ? "grey" : "red"} 
                 transparent 
-                opacity={0.1} 
-                border={1}
+                opacity={1} 
+                // border={1}
             />
         </mesh>
     )

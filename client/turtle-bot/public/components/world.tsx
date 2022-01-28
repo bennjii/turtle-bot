@@ -44,17 +44,17 @@ const World: React.FC<{ }> = ({ }) => {
             {/* <pointLight position={[-10, -10, -10]} /> */}
 
             {
-                fleet?.drones ? 
-                    (fleet?.drones)?.map((__d: Drone, i: number) => {  
-                        // if(fleet.drones[i].drone_id == currentDrone.drone_id) return <></>;    
-                        console.log(" -> ", __d, fleet.drones[i]);
+                // fleet?.drones ? 
+                //     (fleet?.drones)?.map((__d: Drone, i: number) => {  
+                //         // if(fleet.drones[i].drone_id == currentDrone.drone_id) return <></>;    
+                //         console.log(" -> ", __d, fleet.drones[i]);
                                     
-                        return ( 
-                            <DroneBox drone={__d}  droneChange={setCurrentDrone} key={`WORLD.DRONE${__d.drone_id}`}/> 
-                        )
-                    })
-                :
-                    <></>
+                //         return ( 
+                //             <DroneBox drone={__d}  droneChange={setCurrentDrone} key={`WORLD.DRONE${__d.drone_id}`}/> 
+                //         )
+                //     })
+                // :
+                //     <></>
             }
 
             {
@@ -62,13 +62,13 @@ const World: React.FC<{ }> = ({ }) => {
                     Object.keys(fleet?.map?.data?.world).map((position: any) => {
                         let positions = position.split(',').map(p => parseInt(p)) as [number, number, number];
 
-                        return (
+                        return fleet?.map?.data?.world[position].name !== "minecraft:stone" ? (
                             <Block 
                                 key={position} 
                                 position={[positions[0], positions[1], positions[2]]}
                                 data={fleet?.map?.data?.world[position]}
                                 ></Block>
-                        )
+                        ) : <></>
                     })
                 :
                     <></>
